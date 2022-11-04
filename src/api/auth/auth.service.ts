@@ -14,7 +14,7 @@ import { ConfigService } from '@nestjs/config';
 // import { User, UserSchema, UserDocument } from './../users/users.schema';
 import { User } from '../shared/types/user';
 import { CredentialsDTO } from './dto/auth.dto';
-import { UserDTO } from '../users/dto/create-user.dto';
+import { UserDTO, UserSignupDTO } from '../users/dto/create-user.dto';
 import { validateEmail } from '../shared/utils';
 
 @Injectable()
@@ -61,7 +61,7 @@ export class AuthService {
         };
     }
 
-    async create(userDTO: CredentialsDTO): Promise<UserDTO> {
+    async create(userDTO: UserSignupDTO): Promise<UserDTO> {
         return this.usersService.create(userDTO);
     }
 

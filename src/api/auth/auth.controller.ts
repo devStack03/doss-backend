@@ -29,6 +29,7 @@ import {
 import { GeneralResponseDTO } from "../shared/dto/general.response.dto";
 import { JwtAuthGuard } from "./jwt-auth.guard";
 import { ErrorResponseDTO } from "../shared/dto";
+import { UserSignupDTO } from "../users/dto/create-user.dto";
 
 
 @ApiTags("Auth")
@@ -47,7 +48,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 200, type: SignupResponseDTO, description: "Verify your email" })
   @ApiResponse({ status: 400, type: ErrorResponseDTO, description: "Validation error" })
-  async register(@Body() user: CredentialsDTO, @Headers() header) {
+  async register(@Body() user: UserSignupDTO, @Req() req) {
     try {
       const _user = await this.authService.create(user);
       // await this.emailConfirmationService.sendVerificationLink(user.email, header.host);

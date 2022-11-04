@@ -22,40 +22,59 @@ const UserSchema = new mongoose.Schema(
       minlength: 5,
       maxlength: 255,
     },
-    created: { type: Date, default: Date.now },
+    createdAt: { type: Date, default: Date.now },
     refreshToken: {
       type: String
-    },
-    logs: {
-      type: [String],
-      default: []
     },
     emailVerified: {
       type: Boolean,
       default: false
+    },
+    fullName: {
+      type: String,
+      required: true,
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+    },
+    invitationCode: {
+      type: String,
+      required: true
+    },
+    subscriptionPlan: {
+      type: String,
+      required: true
+    },
+    subscriptionStart: {
+      type: String,
+      required: true
+    },
+    stripeCustomerId: {
+      type: String,
     }
   },
   opts
 );
 
 // mongoose middlewares1: hashPasswordIfModified
-UserSchema.pre("save", async function (next) {
-  // DO NOT USE ARROW FUNCTION or this pre-hook won't work as arrow functions use lexical scope for 'this'.
-  try {
-    logger.log("hashPasswordIfModified mongoose pre-hook");
-    if (!this.isModified("password")) {
-      return next();
-    }
+// UserSchema.pre("save", async function (next) {
+//   // DO NOT USE ARROW FUNCTION or this pre-hook won't work as arrow functions use lexical scope for 'this'.
+//   try {
+//     logger.log("hashPasswordIfModified mongoose pre-hook");
+//     if (!this.isModified("password")) {
+//       return next();
+//     }
 
-    const hashed = await bcrypt.hash(this["password"], 10);
+//     const hashed = await bcrypt.hash(this["password"], 10);
 
-    this["password"] = hashed;
-    // this['passwordUpdate'] = Date.now();
-    return next();
-  } catch (err) {
-    return next(err);
-  }
-});
+//     this["password"] = hashed;
+//     // this['passwordUpdate'] = Date.now();
+//     return next();
+//   } catch (err) {
+//     return next(err);
+//   }
+// });
 UserSchema.virtual('id').get(function () {
   return this._id;
 });
