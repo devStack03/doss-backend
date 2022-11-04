@@ -41,7 +41,7 @@ export class UsersService {
         let userAlreadyExists: boolean = userMatch.length > 0;
         if (!userAlreadyExists) {
             const user = await this.userModel.findOne({ email });
-            userAlreadyExists = !user;
+            userAlreadyExists = !!user;
         }
         if (userAlreadyExists) {
             const user = userMatch[0];

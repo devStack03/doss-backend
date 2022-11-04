@@ -11,6 +11,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './api/auth/auth.module';
 import { UsersModule } from './api/users/users.module';
 import { ApiModule } from './api/api.module';
+import { SharedModule } from './api/shared/shared.module';
 
 @Module({
   imports: [
