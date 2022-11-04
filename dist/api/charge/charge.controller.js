@@ -23,6 +23,9 @@ let ChargeController = class ChargeController {
     async createCharge(charge, req) {
         await this.stripeService.charge(charge.amount, charge.paymentMethodId, req.user.stripeCustomerId);
     }
+    async getSecret(body) {
+        return this.stripeService.getSecret(+body.cost);
+    }
 };
 __decorate([
     (0, common_1.Post)(),
@@ -33,6 +36,13 @@ __decorate([
     __metadata("design:paramtypes", [create_charge_dto_1.default, Object]),
     __metadata("design:returntype", Promise)
 ], ChargeController.prototype, "createCharge", null);
+__decorate([
+    (0, common_1.Post)('secret'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChargeController.prototype, "getSecret", null);
 ChargeController = __decorate([
     (0, common_1.Controller)('charge'),
     __metadata("design:paramtypes", [stripe_service_1.default])

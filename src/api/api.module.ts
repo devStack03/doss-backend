@@ -3,6 +3,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ChargeModule } from './charge/charge.module';
 import { SharedModule } from './shared/shared.module';
+import { CouponModule } from './coupon/coupon.module';
+import SeedModule from './shared/seeds/seed.module';
 
 @Global() 
 @Module({
@@ -10,7 +12,9 @@ import { SharedModule } from './shared/shared.module';
     AuthModule,
     UsersModule,
     ChargeModule,
-    SharedModule
+    SharedModule,
+    CouponModule,
+    SeedModule
   ],
   providers: [],
   exports: [],

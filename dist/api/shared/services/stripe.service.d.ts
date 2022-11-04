@@ -6,4 +6,7 @@ export default class StripeService {
     constructor(configService: ConfigService);
     createCustomer(name: string, email: string): Promise<Stripe.Response<Stripe.Customer>>;
     charge(amount: number, paymentMethodId: string, customerId: string): Promise<Stripe.Response<Stripe.PaymentIntent>>;
+    getSecret(cost: any): Promise<{
+        client_secret: string;
+    }>;
 }

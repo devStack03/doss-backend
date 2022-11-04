@@ -31,8 +31,19 @@ let StripeService = class StripeService {
             customer: customerId,
             payment_method: paymentMethodId,
             currency: this.configService.get('STRIPE_CURRENCY'),
-            confirm: true
+            confirm: true,
+            payment_method_types: [
+                'card'
+            ],
         });
+    }
+    async getSecret(cost) {
+        const paymentIntent = await this.stripe.paymentIntents.create({
+            amount: cost * 100,
+            currency: 'eur',
+            automatic_payment_methods: { enabled: true },
+        });
+        return { client_secret: paymentIntent.client_secret };
     }
 };
 StripeService = __decorate([

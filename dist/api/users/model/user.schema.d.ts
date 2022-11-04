@@ -9,7 +9,7 @@ declare const UserSchema: mongoose.Schema<any, mongoose.Model<any, any, any, any
     emailVerified: boolean;
     password?: string;
     refreshToken?: string;
-    createdAt?: Date;
     stripeCustomerId?: string;
+    createdAt?: Date;
 }>;
 export default UserSchema;

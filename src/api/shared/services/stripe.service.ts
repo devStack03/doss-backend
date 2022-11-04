@@ -22,6 +22,7 @@ export default class StripeService {
       name,
       email
     });
+    // this.stripe.paymentIntents.retrieve();
   }
 
   public async charge(amount: number, paymentMethodId: string, customerId: string) {
@@ -30,7 +31,19 @@ export default class StripeService {
       customer: customerId,
       payment_method: paymentMethodId,
       currency: this.configService.get('STRIPE_CURRENCY'),
-      confirm: true
+      confirm: true,
+      payment_method_types: [
+        'card'
+      ],
     })
+  }
+
+  public async getSecret(cost) {
+    const paymentIntent = await this.stripe.paymentIntents.create({
+      amount: cost * 100,
+      currency: 'eur',
+      automatic_payment_methods: { enabled: true },
+    });
+    return { client_secret: paymentIntent.client_secret }
   }
 }

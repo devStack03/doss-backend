@@ -4,4 +4,7 @@ export default class ChargeController {
     private readonly stripeService;
     constructor(stripeService: StripeService);
     createCharge(charge: CreateChargeDto, req: any): Promise<void>;
+    getSecret(body: any): Promise<{
+        client_secret: string;
+    }>;
 }

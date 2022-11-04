@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import CreateChargeDto from './dto/create-charge.dto';
 import StripeService from '../shared/services/stripe.service'; 
@@ -12,5 +12,10 @@ export default class ChargeController {
   @UseGuards(JwtAuthGuard)
   async createCharge(@Body() charge: CreateChargeDto, @Req() req) {
     await this.stripeService.charge(charge.amount, charge.paymentMethodId, req.user.stripeCustomerId);
+  }
+
+  @Post('secret')
+  async getSecret(@Body() body) {
+    return this.stripeService.getSecret(+body.cost);
   }
 }

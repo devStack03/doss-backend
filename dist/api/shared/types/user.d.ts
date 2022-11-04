@@ -5,6 +5,11 @@ export interface User extends Document {
     password?: string;
     created?: Date;
     refreshToken?: string;
-    logs: string[];
     emailVerified: boolean;
+    fullName: string;
+    phoneNumber: string;
+    invitationCode: string;
+    subscriptionPlan: string;
+    subscriptionStart: string;
+    stripeCustomerId: string;
 }
