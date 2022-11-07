@@ -61,6 +61,9 @@ let StripeService = class StripeService {
             items: [{
                     price: subscriptionDto.priceId,
                 }],
+            payment_settings: {
+                payment_method_types: ['card']
+            },
             payment_behavior: 'default_incomplete',
             expand: ['latest_invoice.payment_intent'],
         });

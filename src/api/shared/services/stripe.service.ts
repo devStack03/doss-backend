@@ -33,7 +33,7 @@ export default class StripeService {
     });
     if (!prices) throw new BadRequestException('Getting prices was failed');
 
-    return {prices, customer};
+    return { prices, customer };
     // this.stripe.paymentIntents.retrieve();
   }
 
@@ -67,6 +67,9 @@ export default class StripeService {
       items: [{
         price: subscriptionDto.priceId,
       }],
+      payment_settings: {
+        payment_method_types: ['card']
+      },
       payment_behavior: 'default_incomplete',
       expand: ['latest_invoice.payment_intent'],
     });
