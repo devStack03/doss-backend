@@ -1,7 +1,6 @@
 import * as mongoose from "mongoose";
 declare const UserSchema: mongoose.Schema<any, mongoose.Model<any, any, any, any, any>, {}, {}, any, {}, "type", {
     email: string;
-    emailVerified: boolean;
     fullName: string;
     phoneNumber: string;
     invitationCode: string;
@@ -9,9 +8,10 @@ declare const UserSchema: mongoose.Schema<any, mongoose.Model<any, any, any, any
     subscriptionStart: string;
     stripeCustomerId: string;
     stripeSubscriptionId: string;
+    emailVerified: boolean;
     password?: string;
-    refreshToken?: string;
     stripeClientSecret?: string;
     lastPaymentStatus?: string;
+    refreshToken?: string;
 }>;
 export default UserSchema;
