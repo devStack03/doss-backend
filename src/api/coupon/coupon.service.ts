@@ -17,13 +17,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 import { Coupon } from '../shared/types/coupon';
+import { UsersService } from '../users/users.service';
+import { CreateCustomerDto } from '../users/dto/create-user.dto';
 
 @Injectable()
 export class CouponService {
 
   constructor(
-    @InjectModel('Coupon') private couponModel: Model<Coupon>
-  ){}
+    @InjectModel('Coupon') private couponModel: Model<Coupon>,
+    private usersService: UsersService
+  ) { }
   create(createCouponDto: CreateCouponDto) {
     return 'This action adds a new coupon';
   }
@@ -36,12 +39,13 @@ export class CouponService {
     return `This action returns a #${id} coupon`;
   }
 
-  async findOneByCode(code: string) {
-    const coupon = await this.couponModel.findOne({code});
+  async findOneByCode(customer: CreateCustomerDto) {
+    const coupon = await this.couponModel.findOne({ code: customer.code });
     if (!coupon) {
       throw new BadRequestException('Coupon not found');
     }
-    return coupon;
+    //create stripe customer
+    return this.usersService.createCustomer(customer);
   }
 
   update(id: number, updateCouponDto: UpdateCouponDto) {

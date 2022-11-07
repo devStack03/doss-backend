@@ -16,9 +16,11 @@ exports.CouponService = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("mongoose");
 const mongoose_2 = require("@nestjs/mongoose");
+const users_service_1 = require("../users/users.service");
 let CouponService = class CouponService {
-    constructor(couponModel) {
+    constructor(couponModel, usersService) {
         this.couponModel = couponModel;
+        this.usersService = usersService;
     }
     create(createCouponDto) {
         return 'This action adds a new coupon';
@@ -29,12 +31,12 @@ let CouponService = class CouponService {
     async findOne(id) {
         return `This action returns a #${id} coupon`;
     }
-    async findOneByCode(code) {
-        const coupon = await this.couponModel.findOne({ code });
+    async findOneByCode(customer) {
+        const coupon = await this.couponModel.findOne({ code: customer.code });
         if (!coupon) {
             throw new common_1.BadRequestException('Coupon not found');
         }
-        return coupon;
+        return this.usersService.createCustomer(customer);
     }
     update(id, updateCouponDto) {
         return `This action updates a #${id} coupon`;
@@ -46,7 +48,8 @@ let CouponService = class CouponService {
 CouponService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_2.InjectModel)('Coupon')),
-    __metadata("design:paramtypes", [mongoose_1.Model])
+    __metadata("design:paramtypes", [mongoose_1.Model,
+        users_service_1.UsersService])
 ], CouponService);
 exports.CouponService = CouponService;
 //# sourceMappingURL=coupon.service.js.map

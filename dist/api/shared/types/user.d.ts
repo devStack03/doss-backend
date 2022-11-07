@@ -12,4 +12,7 @@ export interface User extends Document {
     subscriptionPlan: string;
     subscriptionStart: string;
     stripeCustomerId: string;
+    stripeSubscriptionId: string;
+    stripeClientSecret: string;
+    lastPaymentStatus: string;
 }

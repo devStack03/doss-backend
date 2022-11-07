@@ -1,4 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
 
@@ -18,10 +21,19 @@ export default class StripeService {
   }
 
   public async createCustomer(name: string, email: string) {
-    return this.stripe.customers.create({
+    const customer = await this.stripe.customers.create({
       name,
       email
     });
+    if (!customer) throw new BadRequestException('Stripe customer creation failed');
+
+    const prices = await this.stripe.prices.list({
+      // lookup_keys: ['sample_basic', 'sample_premium'],
+      expand: ['data.product']
+    });
+    if (!prices) throw new BadRequestException('Getting prices was failed');
+
+    return {prices, customer};
     // this.stripe.paymentIntents.retrieve();
   }
 
@@ -42,8 +54,27 @@ export default class StripeService {
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount: cost * 100,
       currency: 'eur',
-      automatic_payment_methods: { enabled: true },
+      payment_method_types: [
+        'card'
+      ],
     });
     return { client_secret: paymentIntent.client_secret }
+  }
+
+  public async createSubscription(subscriptionDto: any) {
+    const subscription = await this.stripe.subscriptions.create({
+      customer: subscriptionDto.customerId,
+      items: [{
+        price: subscriptionDto.priceId,
+      }],
+      payment_behavior: 'default_incomplete',
+      expand: ['latest_invoice.payment_intent'],
+    });
+
+    if (!subscription) throw new BadRequestException('subscription failed');
+    return {
+      subscriptionId: subscription.id,
+      invoiceData: subscription.latest_invoice,
+    };
   }
 }

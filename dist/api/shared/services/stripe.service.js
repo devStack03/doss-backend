@@ -20,10 +20,18 @@ let StripeService = class StripeService {
         });
     }
     async createCustomer(name, email) {
-        return this.stripe.customers.create({
+        const customer = await this.stripe.customers.create({
             name,
             email
         });
+        if (!customer)
+            throw new common_1.BadRequestException('Stripe customer creation failed');
+        const prices = await this.stripe.prices.list({
+            expand: ['data.product']
+        });
+        if (!prices)
+            throw new common_1.BadRequestException('Getting prices was failed');
+        return { prices, customer };
     }
     async charge(amount, paymentMethodId, customerId) {
         return this.stripe.paymentIntents.create({
@@ -41,9 +49,27 @@ let StripeService = class StripeService {
         const paymentIntent = await this.stripe.paymentIntents.create({
             amount: cost * 100,
             currency: 'eur',
-            automatic_payment_methods: { enabled: true },
+            payment_method_types: [
+                'card'
+            ],
         });
         return { client_secret: paymentIntent.client_secret };
+    }
+    async createSubscription(subscriptionDto) {
+        const subscription = await this.stripe.subscriptions.create({
+            customer: subscriptionDto.customerId,
+            items: [{
+                    price: subscriptionDto.priceId,
+                }],
+            payment_behavior: 'default_incomplete',
+            expand: ['latest_invoice.payment_intent'],
+        });
+        if (!subscription)
+            throw new common_1.BadRequestException('subscription failed');
+        return {
+            subscriptionId: subscription.id,
+            invoiceData: subscription.latest_invoice,
+        };
     }
 };
 StripeService = __decorate([

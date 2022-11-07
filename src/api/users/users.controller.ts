@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Post, Body, Req, Request, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { LocalAuthGuard } from 'src/api/auth/local-auth.guard';
+import { CreateCustomerDto } from './dto/create-user.dto';
 
 
 @Controller('users')
@@ -25,6 +26,16 @@ export class UsersController {
     async findSecond(@Param('id') id: string) {
         console.log(id);
         return this.userService.findAll();
+    }
+
+    @Post('/create-customer')
+    async createCustomer(@Body() customer: CreateCustomerDto) {
+        return this.userService.createCustomer(customer);
+    }
+
+    @Post('create-subscription')
+    async createSubscription(@Body() subscription: any) {
+        return this.userService.createSubscription(subscription);
     }
 }
 

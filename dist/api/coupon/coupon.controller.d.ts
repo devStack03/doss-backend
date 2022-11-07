@@ -1,3 +1,4 @@
+import { CreateCustomerDto } from '../users/dto/create-user.dto';
 import { CouponService } from './coupon.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
@@ -6,10 +7,10 @@ export declare class CouponController {
     constructor(couponService: CouponService);
     create(createCouponDto: CreateCouponDto): string;
     findAll(): string;
-    findOneByCode(body: any): Promise<{
+    findOneByCode(customer: CreateCustomerDto): Promise<{
         status: number;
-        data: string;
-        message: string;
+        customer: import("stripe").Stripe.Response<import("stripe").Stripe.Customer>;
+        prices: import("stripe").Stripe.Response<import("stripe").Stripe.ApiList<import("stripe").Stripe.Price>>;
     }>;
     findOne(id: string): Promise<string>;
     update(id: string, updateCouponDto: UpdateCouponDto): string;

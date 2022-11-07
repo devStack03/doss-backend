@@ -12,6 +12,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const coupon_service_1 = require("./coupon.service");
 const coupon_controller_1 = require("./coupon.controller");
 const coupon_schema_1 = require("./model/coupon.schema");
+const users_module_1 = require("../users/users.module");
 let CouponModule = class CouponModule {
 };
 CouponModule = __decorate([
@@ -21,7 +22,8 @@ CouponModule = __decorate([
                 {
                     name: 'Coupon', schema: coupon_schema_1.default
                 }
-            ])
+            ]),
+            users_module_1.UsersModule
         ],
         controllers: [coupon_controller_1.CouponController],
         providers: [coupon_service_1.CouponService]

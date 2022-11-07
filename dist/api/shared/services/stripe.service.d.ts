@@ -4,9 +4,16 @@ export default class StripeService {
     private configService;
     private stripe;
     constructor(configService: ConfigService);
-    createCustomer(name: string, email: string): Promise<Stripe.Response<Stripe.Customer>>;
+    createCustomer(name: string, email: string): Promise<{
+        prices: Stripe.Response<Stripe.ApiList<Stripe.Price>>;
+        customer: Stripe.Response<Stripe.Customer>;
+    }>;
     charge(amount: number, paymentMethodId: string, customerId: string): Promise<Stripe.Response<Stripe.PaymentIntent>>;
     getSecret(cost: any): Promise<{
         client_secret: string;
+    }>;
+    createSubscription(subscriptionDto: any): Promise<{
+        subscriptionId: string;
+        invoiceData: string | Stripe.Invoice;
     }>;
 }

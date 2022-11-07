@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserSignupDTO = exports.UserDTO = void 0;
+exports.CreateCustomerDto = exports.UserSignupDTO = exports.UserDTO = void 0;
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
 class UserDTO {
@@ -75,5 +75,39 @@ __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], UserSignupDTO.prototype, "subscriptionStart", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], UserSignupDTO.prototype, "stripeCustomerId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], UserSignupDTO.prototype, "stripeSubscriptionId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], UserSignupDTO.prototype, "stripeClientSecret", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], UserSignupDTO.prototype, "lastPaymentStatus", void 0);
 exports.UserSignupDTO = UserSignupDTO;
+class CreateCustomerDto {
+}
+__decorate([
+    (0, class_validator_1.IsEmail)(),
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], CreateCustomerDto.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], CreateCustomerDto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], CreateCustomerDto.prototype, "code", void 0);
+exports.CreateCustomerDto = CreateCustomerDto;
 //# sourceMappingURL=create-user.dto.js.map

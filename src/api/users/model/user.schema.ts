@@ -1,5 +1,6 @@
 import * as bcrypt from "bcrypt";
 import * as mongoose from "mongoose";
+import * as timestamp from 'mongoose-timestamp'
 import { Logger } from "@nestjs/common";
 
 const logger = new Logger("User.schema");
@@ -22,7 +23,6 @@ const UserSchema = new mongoose.Schema(
       minlength: 5,
       maxlength: 255,
     },
-    createdAt: { type: Date, default: Date.now },
     refreshToken: {
       type: String
     },
@@ -52,6 +52,18 @@ const UserSchema = new mongoose.Schema(
     },
     stripeCustomerId: {
       type: String,
+      default: null
+    },
+    stripeSubscriptionId: {
+      type: String,
+      default: null
+    },
+    stripeClientSecret: {
+      type: String,
+    },
+
+    lastPaymentStatus: {
+      type: String,
     }
   },
   opts
@@ -78,5 +90,7 @@ const UserSchema = new mongoose.Schema(
 UserSchema.virtual('id').get(function () {
   return this._id;
 });
+
+UserSchema.plugin(timestamp)
 
 export default UserSchema;

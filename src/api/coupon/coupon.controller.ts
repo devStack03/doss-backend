@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { CreateCustomerDto } from '../users/dto/create-user.dto';
 import { CouponService } from './coupon.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
@@ -18,13 +19,9 @@ export class CouponController {
   }
 
   @Post('/validate')
-  async findOneByCode(@Body() body) {
-    const coupon = await this.couponService.findOneByCode(body.code);
-    return {
-      status: 1,
-      data: coupon.code,
-      message: 'success'
-    };
+  async findOneByCode(@Body() customer: CreateCustomerDto) {
+    const result = await this.couponService.findOneByCode(customer);
+    return result;
   }
   @Get(':id')
   findOne(@Param('id') id: string) {

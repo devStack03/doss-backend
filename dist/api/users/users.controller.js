@@ -16,6 +16,7 @@ exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const local_auth_guard_1 = require("../auth/local-auth.guard");
+const create_user_dto_1 = require("./dto/create-user.dto");
 let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
@@ -30,6 +31,12 @@ let UsersController = class UsersController {
     async findSecond(id) {
         console.log(id);
         return this.userService.findAll();
+    }
+    async createCustomer(customer) {
+        return this.userService.createCustomer(customer);
+    }
+    async createSubscription(subscription) {
+        return this.userService.createSubscription(subscription);
     }
 };
 __decorate([
@@ -51,6 +58,20 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findSecond", null);
+__decorate([
+    (0, common_1.Post)('/create-customer'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_user_dto_1.CreateCustomerDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "createCustomer", null);
+__decorate([
+    (0, common_1.Post)('create-subscription'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "createSubscription", null);
 UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

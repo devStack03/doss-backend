@@ -37,8 +37,6 @@ let UsersService = class UsersService {
             throw new common_1.HttpException("User already exists", common_1.HttpStatus.BAD_REQUEST);
         }
         common_1.Logger.log(userDTO);
-        const stripeCustomer = await this.stripeService.createCustomer(userDTO.fullName, userDTO.email);
-        userDTO.stripeCustomerId = stripeCustomer.id;
         const newUser = new this.userModel(userDTO);
         try {
             await newUser.validate();
@@ -55,7 +53,7 @@ let UsersService = class UsersService {
         return newUser;
     }
     async findOne(email) {
-        return this.userModel.findOne({ email: email }).select("email password emailVerified").lean().exec();
+        return this.userModel.findOne({ email: email });
     }
     async findByUserId(userId) {
         const user = await this.userModel.findById(userId);
@@ -87,6 +85,17 @@ let UsersService = class UsersService {
         return this.userModel.updateOne({ email }, {
             emailVerified: true
         });
+    }
+    async createCustomer(_customer) {
+        const user = await this.findOne(_customer.email);
+        common_1.Logger.log(`${_customer.email}`);
+        if (user)
+            throw new common_1.BadRequestException('User already exist');
+        const { customer, prices } = await this.stripeService.createCustomer(_customer.name, _customer.email);
+        return { status: 1, customer, prices };
+    }
+    async createSubscription(subscriptionDto) {
+        return this.stripeService.createSubscription(subscriptionDto);
     }
 };
 UsersService = __decorate([

@@ -16,4 +16,12 @@ export declare class UserSignupDTO {
     subscriptionPlan: string;
     subscriptionStart: string;
     stripeCustomerId: string;
+    stripeSubscriptionId: string;
+    stripeClientSecret: string;
+    lastPaymentStatus: string;
+}
+export declare class CreateCustomerDto {
+    email: string;
+    name: string;
+    code: string;
 }

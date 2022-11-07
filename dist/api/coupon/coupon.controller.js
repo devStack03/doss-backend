@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CouponController = void 0;
 const common_1 = require("@nestjs/common");
+const create_user_dto_1 = require("../users/dto/create-user.dto");
 const coupon_service_1 = require("./coupon.service");
 const create_coupon_dto_1 = require("./dto/create-coupon.dto");
 const update_coupon_dto_1 = require("./dto/update-coupon.dto");
@@ -27,13 +28,9 @@ let CouponController = class CouponController {
     findAll() {
         return this.couponService.findAll();
     }
-    async findOneByCode(body) {
-        const coupon = await this.couponService.findOneByCode(body.code);
-        return {
-            status: 1,
-            data: coupon.code,
-            message: 'success'
-        };
+    async findOneByCode(customer) {
+        const result = await this.couponService.findOneByCode(customer);
+        return result;
     }
     findOne(id) {
         return this.couponService.findOne(+id);
@@ -62,7 +59,7 @@ __decorate([
     (0, common_1.Post)('/validate'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_user_dto_1.CreateCustomerDto]),
     __metadata("design:returntype", Promise)
 ], CouponController.prototype, "findOneByCode", null);
 __decorate([
