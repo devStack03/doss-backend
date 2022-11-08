@@ -138,6 +138,9 @@ export declare class CouponController {
         status: number;
         customer: import("stripe").Stripe.Response<import("stripe").Stripe.Customer>;
         prices: import("stripe").Stripe.Response<import("stripe").Stripe.ApiList<import("stripe").Stripe.Price>>;
+    } | {
+        status: number;
+        error: string;
     }>;
     findOne(id: string): Promise<string>;
     update(id: string, updateCouponDto: UpdateCouponDto): string;

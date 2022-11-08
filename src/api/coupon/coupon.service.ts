@@ -42,7 +42,7 @@ export class CouponService {
   async findOneByCode(customer: CreateCustomerDto) {
     const coupon = await this.couponModel.findOne({ code: customer.code });
     if (!coupon) {
-      throw new BadRequestException('Coupon not found');
+      return {status: -3, error: 'Invalid coupon'};
     }
     //create stripe customer
     return this.usersService.createCustomer(customer);

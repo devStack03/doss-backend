@@ -34,7 +34,7 @@ let CouponService = class CouponService {
     async findOneByCode(customer) {
         const coupon = await this.couponModel.findOne({ code: customer.code });
         if (!coupon) {
-            throw new common_1.BadRequestException('Coupon not found');
+            return { status: -3, error: 'Invalid coupon' };
         }
         return this.usersService.createCustomer(customer);
     }

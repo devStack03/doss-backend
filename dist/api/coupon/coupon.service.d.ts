@@ -142,6 +142,9 @@ export declare class CouponService {
         status: number;
         customer: import("stripe").Stripe.Response<import("stripe").Stripe.Customer>;
         prices: import("stripe").Stripe.Response<import("stripe").Stripe.ApiList<import("stripe").Stripe.Price>>;
+    } | {
+        status: number;
+        error: string;
     }>;
     update(id: number, updateCouponDto: UpdateCouponDto): string;
     remove(id: number): string;
