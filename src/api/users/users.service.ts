@@ -32,10 +32,10 @@ export class UsersService {
 
     async create(userDTO: UserSignupDTO): Promise<any> {
         const { email } = userDTO;
-        // const validationResult = validateEmail(email);
-        // if (!validationResult) {
-        //     throw new HttpException("Email format is incorrect", HttpStatus.BAD_REQUEST);
-        // }
+        const validationResult = validateEmail(email);
+        if (!validationResult) {
+            throw new HttpException("Email format is incorrect", HttpStatus.BAD_REQUEST);
+        }
         const findEmailRegExp = `^${userDTO.email}$`;
         const userMatch = await this.userModel.find({ email: { $regex: findEmailRegExp, $options: "i" } });
         let userAlreadyExists: boolean = userMatch.length > 0;

@@ -2,41 +2,43 @@ import { Controller, Get, Param, Post, Body, Req, Request, UseGuards } from '@ne
 import { UsersService } from './users.service';
 import { LocalAuthGuard } from 'src/api/auth/local-auth.guard';
 import { CreateCustomerDto } from './dto/create-user.dto';
+import { validateEmail } from '../shared/utils';
+import { Logger } from 'winston';
 
 
 @Controller('users')
 export class UsersController {
-    constructor(private readonly userService: UsersService) { }
+  constructor(private readonly userService: UsersService) { }
 
-    @Get('')
-    async findAll() {
-        return this.userService.findAll();
-    }
+  @Get('')
+  async findAll() {
+    return this.userService.findAll();
+  }
 
-    @Get(':id')
-    async findOne(@Param() params) {
-        console.log(params.id);
-        return this.userService.findAll();
-    }
+  @Get(':id')
+  async findOne(@Param() params) {
+    console.log(params.id);
+    return this.userService.findAll();
+  }
 
-    /**
-     * another way using Param
-     */
+  /**
+   * another way using Param
+   */
 
-    async findSecond(@Param('id') id: string) {
-        console.log(id);
-        return this.userService.findAll();
-    }
+  async findSecond(@Param('id') id: string) {
+    console.log(id);
+    return this.userService.findAll();
+  }
 
-    @Post('/create-customer')
-    async createCustomer(@Body() customer: CreateCustomerDto) {
-        return this.userService.createCustomer(customer);
-    }
+  @Post('/create-customer')
+  async createCustomer(@Body() customer: CreateCustomerDto) {
+    return this.userService.createCustomer(customer);
+  }
 
-    @Post('create-subscription')
-    async createSubscription(@Body() subscription: any) {
-        return this.userService.createSubscription(subscription);
-    }
+  @Post('create-subscription')
+  async createSubscription(@Body() subscription: any) {
+    return this.userService.createSubscription(subscription);
+  }
 }
 
 // const mapToDto = (user: User) => {

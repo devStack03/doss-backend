@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("mongoose");
 const mongoose_2 = require("@nestjs/mongoose");
 const bcrypt = require("bcrypt");
+const utils_1 = require("../shared/utils/utils");
 const stripe_service_1 = require("../shared/services/stripe.service");
 let UsersService = class UsersService {
     constructor(userModel, stripeService) {
@@ -25,6 +26,10 @@ let UsersService = class UsersService {
     }
     async create(userDTO) {
         const { email } = userDTO;
+        const validationResult = (0, utils_1.validateEmail)(email);
+        if (!validationResult) {
+            throw new common_1.HttpException("Email format is incorrect", common_1.HttpStatus.BAD_REQUEST);
+        }
         const findEmailRegExp = `^${userDTO.email}$`;
         const userMatch = await this.userModel.find({ email: { $regex: findEmailRegExp, $options: "i" } });
         let userAlreadyExists = userMatch.length > 0;
