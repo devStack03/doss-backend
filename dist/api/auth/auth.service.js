@@ -36,7 +36,7 @@ const config_1 = require("@nestjs/config");
 const utils_1 = require("../shared/utils");
 let verifyCode = {
     auth: {
-        sms: "Doss verification code: @code",
+        sms: "Tu código de verificación es: @code",
         reset_password: 'Doss reset password code: @code',
     },
 };
@@ -160,7 +160,7 @@ let AuthService = class AuthService {
         const sms = verifyCode.auth[smsType].replace("@code", String(code));
         const message = await this.twilioService.client.messages.create({
             body: sms,
-            from: process.env.TWILIO_PHONE_NUMBER,
+            from: 'DOSS',
             to: `+34${phoneNumber}`,
         });
         return { message, code };

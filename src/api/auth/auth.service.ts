@@ -20,7 +20,7 @@ import { randomCode, validateEmail } from '../shared/utils';
 
 let verifyCode = {
     auth: {
-        sms: "Doss verification code: @code",
+        sms: "Tu código de verificación es: @code",
         reset_password: 'Doss reset password code: @code',
     },
 };
@@ -167,7 +167,7 @@ export class AuthService {
         const sms = verifyCode.auth[smsType].replace("@code", String(code));
         const message = await this.twilioService.client.messages.create({
             body: sms,
-            from: process.env.TWILIO_PHONE_NUMBER,
+            from: 'DOSS',//process.env.TWILIO_PHONE_NUMBER,
             to: `+34${phoneNumber}`,
         });
 
