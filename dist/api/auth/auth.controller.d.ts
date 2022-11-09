@@ -1,5 +1,5 @@
 import { AuthService } from "./auth.service";
-import { EmailDTO } from './dto/auth.dto';
+import { CredentialsDTO, EmailDTO, SendLoginCodeDto } from './dto/auth.dto';
 import { UserSignupDTO } from "../users/dto/create-user.dto";
 export declare class AuthController {
     private readonly authService;
@@ -15,13 +15,22 @@ export declare class AuthController {
         message?: undefined;
         id?: undefined;
     }>;
-    login(req: any): Promise<{
-        msg: string;
+    login(userLoginDto: CredentialsDTO): Promise<{
         status: number;
-        refresh_token: string;
+        message: string;
+        accessToken?: undefined;
+        refreshToken?: undefined;
+        token_type?: undefined;
+        expires_in?: undefined;
+        id?: undefined;
+    } | {
+        accessToken: string;
+        status: number;
+        refreshToken: string;
         token_type: string;
         expires_in: string;
-        user: any;
+        id: any;
+        message?: undefined;
     }>;
     refresh(req: any): Promise<{
         status: number;
@@ -35,5 +44,17 @@ export declare class AuthController {
     checkEmail(req: any, body: EmailDTO): Promise<{
         status: number;
         msg: string;
+    }>;
+    sendCode(codeDto: SendLoginCodeDto, req: any): Promise<{
+        status: number;
+        message: string;
+        data?: undefined;
+    } | {
+        status: number;
+        data: {
+            id: string;
+            phoneNumber: string;
+        };
+        message: string;
     }>;
 }

@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
 const app_service_1 = require("./app.service");
-const local_auth_guard_1 = require("./api/auth/local-auth.guard");
 const auth_service_1 = require("./api/auth/auth.service");
 const jwt_auth_guard_1 = require("./api/auth/jwt-auth.guard");
 let AppController = class AppController {
@@ -31,9 +30,6 @@ let AppController = class AppController {
     }
     findAll() {
         return 'This action returns all cats';
-    }
-    async login(req) {
-        return this.authService.login(req.user);
     }
     getProfile(req) {
         return req.user;
@@ -57,14 +53,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", String)
 ], AppController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
-    (0, common_1.Post)('/auth/login'),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], AppController.prototype, "login", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)('/profile'),

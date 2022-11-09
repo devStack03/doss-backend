@@ -24,4 +24,5 @@ export declare class CreateCustomerDto {
     email: string;
     name: string;
     code: string;
+    phoneNumber: string;
 }

@@ -24,6 +24,7 @@ import {
   EmailDTO,
   LoginResponseDTO,
   RefreshTokenDTO,
+  SendLoginCodeDto,
   SignupResponseDTO
 } from './dto/auth.dto';
 import { GeneralResponseDTO } from "../shared/dto/general.response.dto";
@@ -59,17 +60,16 @@ export class AuthController {
     }
   }
 
-  @ApiBody({ type: CredentialsDTO })
-  @UseGuards(LocalAuthGuard)
   @Post('/login')
   @ApiOperation({
     summary: "User login endpoint.",
-    description: "User login with email, password."
+    description: "User login with phonenumber, code."
   })
   @ApiResponse({ status: 201, type: LoginResponseDTO, description: "User logged and JWT returned." })
   @ApiResponse({ status: 400, type: ErrorResponseDTO, description: "Validation error" })
-  async login(@Request() req: any) {
-    return this.authService.login(req.user);
+  async login(@Body() userLoginDto: CredentialsDTO) {
+    console.log(userLoginDto);
+    return this.authService.login(userLoginDto);
   }
 
   @ApiBearerAuth('access-token')
@@ -111,6 +111,15 @@ export class AuthController {
   @ApiResponse({ status: 400, type: ErrorResponseDTO, description: "Validation error" })
   async checkEmail(@Request() req: any, @Body() body: EmailDTO) {
     return this.authService.checkEmail(body.email);
+  }
+
+  @Post('/send_login_code')
+  @ApiOperation({
+    summary: "Send SMS for phone number login"
+  })
+  async sendCode(@Body() codeDto: SendLoginCodeDto, @Req() req: any) {
+    // const userId = req.user.id;
+    return this.authService.sendLoginCode(codeDto);
   }
 
 }

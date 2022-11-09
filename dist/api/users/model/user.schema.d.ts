@@ -9,6 +9,7 @@ declare const UserSchema: mongoose.Schema<any, mongoose.Model<any, any, any, any
     stripeCustomerId: string;
     stripeSubscriptionId: string;
     emailVerified: boolean;
+    verificationCode: string;
     password?: string;
     stripeClientSecret?: string;
     lastPaymentStatus?: string;

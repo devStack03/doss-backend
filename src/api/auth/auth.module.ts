@@ -10,7 +10,7 @@ import UserSchema from '../users/model/user.schema';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
 import { JwtRefreshTokenStrategy } from './jwt-refresh-token.strategy';
-
+import { TwilioModule } from 'nestjs-twilio';
 @Global()
 @Module({
   imports: [
@@ -18,6 +18,10 @@ import { JwtRefreshTokenStrategy } from './jwt-refresh-token.strategy';
     UsersModule,
     PassportModule,
     JwtModule.register({}),
+    TwilioModule.forRoot({
+      accountSid: process.env.TWILIO_ACCOUNT_SID,
+      authToken: process.env.TWILIO_AUTH_TOKEN,
+    }),
 
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshTokenStrategy],

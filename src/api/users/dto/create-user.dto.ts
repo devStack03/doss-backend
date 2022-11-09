@@ -75,4 +75,8 @@ export class CreateCustomerDto {
   @IsString()
   @ApiProperty()
   code: string;
+
+  @IsString()
+  @ApiProperty()
+  phoneNumber: string;
 }

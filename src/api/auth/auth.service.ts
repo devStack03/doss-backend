@@ -4,6 +4,7 @@ import {
     BadRequestException,
     ForbiddenException,
 } from '@nestjs/common';
+import { TwilioService } from 'nestjs-twilio';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { Logger } from '@nestjs/common';
@@ -13,15 +14,28 @@ import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 // import { User, UserSchema, UserDocument } from './../users/users.schema';
 import { User } from '../shared/types/user';
-import { CredentialsDTO } from './dto/auth.dto';
+import { CredentialsDTO, SendLoginCodeDto } from './dto/auth.dto';
 import { UserDTO, UserSignupDTO } from '../users/dto/create-user.dto';
-import { validateEmail } from '../shared/utils';
+import { randomCode, validateEmail } from '../shared/utils';
+
+let verifyCode = {
+    auth: {
+        sms: "Doss verification code: @code",
+        reset_password: 'Doss reset password code: @code',
+    },
+};
+
+export enum SMSType {
+    VERIFY_REGISTER = 'sms',
+    VERIFY_RESET_PASSWORD = 'reset_password'
+}
 
 @Injectable()
 export class AuthService {
     constructor(
         private usersService: UsersService,
         private jwtService: JwtService,
+        private readonly twilioService: TwilioService,
         private configService: ConfigService,
         @InjectModel('User') private userModel: Model<User>
     ) {
@@ -47,17 +61,22 @@ export class AuthService {
         }
     }
 
-    async login(user: any) {
-        const payload = { email: user.email, sub: user._id };
+    async login(userLoginDto: CredentialsDTO) {
+        const user = await this.usersService.findByPhone(userLoginDto.phoneNumber);
+        if (!user) return { status: -2, message: 'user not found'};
+        if (user.verificationCode !== userLoginDto.code)
+            return {status: -3, message: 'invalid code'};
+
+        const payload = { email: userLoginDto.phoneNumber, sub: user._id };
         const { accessToken, refreshToken } = await this.getTokens(payload);
         await this.usersService.setRefreshToken(refreshToken, user._id);
         return {
-            msg: accessToken,
+            accessToken,
             status: 1,
-            refresh_token: refreshToken,
+            refreshToken,
             token_type: "Bearer",
             expires_in: process.env.JWT_EXPIRATION_TIME,
-            user
+            id: user._id
         };
     }
 
@@ -114,8 +133,46 @@ export class AuthService {
         const user = await this.usersService.findOne(email);
         if (!user) throw new BadRequestException('User not found');
         if (user.emailVerified) {
-            return {status: 1, msg: 'Verified.'}
+            return { status: 1, msg: 'Verified.' }
         }
-        return { status: 0, msg: 'Not verified.'}
+        return { status: 0, msg: 'Not verified.' }
     }
+
+    async sendLoginCode(loginCodeDto: SendLoginCodeDto) {
+        const user = await this.usersService.findByPhone(loginCodeDto.phoneNumber);
+        if (!user) {
+            return { status: -1, message: 'user not found' };
+        }
+
+        const { message, code } = await this.sendSMS(loginCodeDto.phoneNumber, SMSType.VERIFY_REGISTER);
+
+        // if (message.errorCode) {
+        //     throw new BadRequestException(message.errorMessage);
+        // }
+        user.verificationCode = code;
+        await user.save();
+        const { id, verificationCode, phoneNumber } = user;
+        return {
+            status: 1,
+            data: {
+                id,
+                phoneNumber
+            },
+            message: 'Verification code sent'
+        }
+    }
+
+    async sendSMS(phoneNumber: string, smsType: SMSType) {
+        const code = randomCode(6, "123456789");
+        const sms = verifyCode.auth[smsType].replace("@code", String(code));
+        const message = '';
+        // const message = await this.twilioService.client.messages.create({
+        //     body: sms,
+        //     from: process.env.TWILIO_PHONE_NUMBER,
+        //     to: `+${phoneNumber}`,
+        // });
+
+        return { message, code };
+    }
+
 }

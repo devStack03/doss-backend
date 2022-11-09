@@ -1,6 +1,9 @@
 export declare class CredentialsDTO {
-    email: string;
-    password: string;
+    phoneNumber: string;
+    code: string;
+}
+export declare class SendLoginCodeDto {
+    phoneNumber: string;
 }
 export declare class EmailDTO {
     email: string;

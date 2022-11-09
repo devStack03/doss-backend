@@ -18,6 +18,7 @@ const user_schema_1 = require("../users/model/user.schema");
 const jwt_strategy_1 = require("./jwt.strategy");
 const auth_controller_1 = require("./auth.controller");
 const jwt_refresh_token_strategy_1 = require("./jwt-refresh-token.strategy");
+const nestjs_twilio_1 = require("nestjs-twilio");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
@@ -28,6 +29,10 @@ AuthModule = __decorate([
             users_module_1.UsersModule,
             passport_1.PassportModule,
             jwt_1.JwtModule.register({}),
+            nestjs_twilio_1.TwilioModule.forRoot({
+                accountSid: process.env.TWILIO_ACCOUNT_SID,
+                authToken: process.env.TWILIO_AUTH_TOKEN,
+            }),
         ],
         providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy, jwt_refresh_token_strategy_1.JwtRefreshTokenStrategy],
         exports: [auth_service_1.AuthService],

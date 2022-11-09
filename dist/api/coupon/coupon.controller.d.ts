@@ -136,11 +136,14 @@ export declare class CouponController {
     findAll(): string;
     findOneByCode(customer: CreateCustomerDto): Promise<{
         status: number;
-        customer: import("stripe").Stripe.Response<import("stripe").Stripe.Customer>;
-        prices: import("stripe").Stripe.Response<import("stripe").Stripe.ApiList<import("stripe").Stripe.Price>>;
+        error: string;
+        customer?: undefined;
+        prices?: undefined;
     } | {
         status: number;
-        error: string;
+        customer: import("stripe").Stripe.Response<import("stripe").Stripe.Customer>;
+        prices: import("stripe").Stripe.Response<import("stripe").Stripe.ApiList<import("stripe").Stripe.Price>>;
+        error?: undefined;
     }>;
     findOne(id: string): Promise<string>;
     update(id: string, updateCouponDto: UpdateCouponDto): string;

@@ -15,4 +15,5 @@ export interface User extends Document {
     stripeSubscriptionId: string;
     stripeClientSecret: string;
     lastPaymentStatus: string;
+    verificationCode: string;
 }

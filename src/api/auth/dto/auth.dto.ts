@@ -1,16 +1,23 @@
 /* eslint-disable max-classes-per-file */
-import { IsEmail, IsNotEmpty, IsOptional } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CredentialsDTO {
     // username: string;
     @IsEmail()
     @ApiProperty()
-    email: string;
+    phoneNumber: string;
 
     @IsNotEmpty()
     @ApiProperty()
-    password: string;
+    code: string;
+}
+
+
+export class SendLoginCodeDto {
+  @IsString()
+  @ApiProperty()
+  phoneNumber: string;
 }
 
 export class EmailDTO {

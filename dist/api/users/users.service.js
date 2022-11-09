@@ -30,16 +30,20 @@ let UsersService = class UsersService {
         if (!validationResult) {
             throw new common_1.HttpException("Email format is incorrect", common_1.HttpStatus.BAD_REQUEST);
         }
-        const findEmailRegExp = `^${userDTO.email}$`;
-        const userMatch = await this.userModel.find({ email: { $regex: findEmailRegExp, $options: "i" } });
-        let userAlreadyExists = userMatch.length > 0;
+        let userAlreadyExists = false;
+        let errorCode = -2;
         if (!userAlreadyExists) {
             const user = await this.userModel.findOne({ email });
             userAlreadyExists = !!user;
+            errorCode = -4;
+        }
+        if (!userAlreadyExists) {
+            const user = await this.findByPhone(userDTO.phoneNumber);
+            userAlreadyExists = !!user;
+            errorCode = -5;
         }
         if (userAlreadyExists) {
-            const user = userMatch[0];
-            throw new common_1.HttpException("User already exists", common_1.HttpStatus.BAD_REQUEST);
+            return { status: errorCode, error: 'user already exists' };
         }
         common_1.Logger.log(userDTO);
         const newUser = new this.userModel(userDTO);
@@ -59,6 +63,10 @@ let UsersService = class UsersService {
     }
     async findOne(email) {
         return this.userModel.findOne({ email: email });
+    }
+    async findByPhone(phoneNumber) {
+        const user = await this.userModel.findOne({ phoneNumber });
+        return user;
     }
     async findByUserId(userId) {
         const user = await this.userModel.findById(userId);
@@ -92,10 +100,22 @@ let UsersService = class UsersService {
         });
     }
     async createCustomer(_customer) {
-        const user = await this.findOne(_customer.email);
-        common_1.Logger.log(`${_customer.email}`);
-        if (user)
-            throw new common_1.BadRequestException('User already exist');
+        let userAlreadyExists = false;
+        let errorCode = -2;
+        if (!userAlreadyExists) {
+            const user = await this.userModel.findOne({ email: _customer.email });
+            userAlreadyExists = !!user;
+            errorCode = -4;
+        }
+        if (!userAlreadyExists) {
+            console.log(_customer.phoneNumber);
+            const user = await this.findByPhone(_customer.phoneNumber);
+            userAlreadyExists = !!user;
+            errorCode = -5;
+        }
+        if (userAlreadyExists) {
+            return { status: errorCode, error: 'user already exists' };
+        }
         const { customer, prices } = await this.stripeService.createCustomer(_customer.name, _customer.email);
         return { status: 1, customer, prices };
     }

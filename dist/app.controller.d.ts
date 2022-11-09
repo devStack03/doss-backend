@@ -7,13 +7,5 @@ export declare class AppController {
     getHello(): string;
     getAnswer(): Object;
     findAll(): string;
-    login(req: any): Promise<{
-        msg: string;
-        status: number;
-        refresh_token: string;
-        token_type: string;
-        expires_in: string;
-        user: any;
-    }>;
     getProfile(req: any): any;
 }

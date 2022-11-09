@@ -23,12 +23,6 @@ export class AppController {
     return 'This action returns all cats';
   }
 
-  @UseGuards(LocalAuthGuard)
-  @Post('/auth/login')
-  async login(@Request() req:any) {
-    return this.authService.login(req.user);
-  }
-
   @UseGuards(JwtAuthGuard)
   @Get('/profile')
   getProfile(@Request() req:any) {

@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const auth_service_1 = require("./auth.service");
 const jwt_refresh_guard_1 = require("./jwt-refresh.guard");
-const local_auth_guard_1 = require("./local-auth.guard");
 const auth_dto_1 = require("./dto/auth.dto");
 const general_response_dto_1 = require("../shared/dto/general.response.dto");
 const jwt_auth_guard_1 = require("./jwt-auth.guard");
@@ -36,8 +35,9 @@ let AuthController = class AuthController {
             return { status: -1, error: error };
         }
     }
-    async login(req) {
-        return this.authService.login(req.user);
+    async login(userLoginDto) {
+        console.log(userLoginDto);
+        return this.authService.login(userLoginDto);
     }
     async refresh(req) {
         return this.authService.refreshTokens(req.user.sub, req.user.refreshToken);
@@ -51,6 +51,9 @@ let AuthController = class AuthController {
     }
     async checkEmail(req, body) {
         return this.authService.checkEmail(body.email);
+    }
+    async sendCode(codeDto, req) {
+        return this.authService.sendLoginCode(codeDto);
     }
 };
 __decorate([
@@ -68,18 +71,16 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
 __decorate([
-    (0, swagger_1.ApiBody)({ type: auth_dto_1.CredentialsDTO }),
-    (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
     (0, common_1.Post)('/login'),
     (0, swagger_1.ApiOperation)({
         summary: "User login endpoint.",
-        description: "User login with email, password."
+        description: "User login with phonenumber, code."
     }),
     (0, swagger_1.ApiResponse)({ status: 201, type: auth_dto_1.LoginResponseDTO, description: "User logged and JWT returned." }),
     (0, swagger_1.ApiResponse)({ status: 400, type: dto_1.ErrorResponseDTO, description: "Validation error" }),
-    __param(0, (0, common_1.Request)()),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [auth_dto_1.CredentialsDTO]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([
@@ -127,6 +128,17 @@ __decorate([
     __metadata("design:paramtypes", [Object, auth_dto_1.EmailDTO]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "checkEmail", null);
+__decorate([
+    (0, common_1.Post)('/send_login_code'),
+    (0, swagger_1.ApiOperation)({
+        summary: "Send SMS for phone number login"
+    }),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [auth_dto_1.SendLoginCodeDto, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "sendCode", null);
 AuthController = __decorate([
     (0, swagger_1.ApiTags)("Auth"),
     (0, common_1.Controller)('auth'),

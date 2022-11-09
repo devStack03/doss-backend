@@ -64,6 +64,11 @@ const UserSchema = new mongoose.Schema(
 
     lastPaymentStatus: {
       type: String,
+    },
+
+    verificationCode: {
+      type: String,
+      default: null
     }
   },
   opts

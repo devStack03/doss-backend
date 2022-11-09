@@ -160,6 +160,9 @@ export declare class UsersService {
     findOne(email: string): Promise<User & {
         _id: import("mongoose").Types.ObjectId;
     }>;
+    findByPhone(phoneNumber: string): Promise<User & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
     findByUserId(userId: string): Promise<User & {
         _id: import("mongoose").Types.ObjectId;
     }>;
@@ -174,8 +177,14 @@ export declare class UsersService {
     markEmailAsConfirmed(email: string): Promise<import("mongodb").UpdateResult>;
     createCustomer(_customer: CreateCustomerDto): Promise<{
         status: number;
+        error: string;
+        customer?: undefined;
+        prices?: undefined;
+    } | {
+        status: number;
         customer: import("stripe").Stripe.Response<import("stripe").Stripe.Customer>;
         prices: import("stripe").Stripe.Response<import("stripe").Stripe.ApiList<import("stripe").Stripe.Price>>;
+        error?: undefined;
     }>;
     createSubscription(subscriptionDto: any): Promise<{
         subscriptionId: string;

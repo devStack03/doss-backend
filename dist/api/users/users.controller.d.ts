@@ -135,8 +135,14 @@ export declare class UsersController {
     findSecond(id: string): Promise<import("../shared/types/user").User[]>;
     createCustomer(customer: CreateCustomerDto): Promise<{
         status: number;
+        error: string;
+        customer?: undefined;
+        prices?: undefined;
+    } | {
+        status: number;
         customer: import("stripe").Stripe.Response<import("stripe").Stripe.Customer>;
         prices: import("stripe").Stripe.Response<import("stripe").Stripe.ApiList<import("stripe").Stripe.Price>>;
+        error?: undefined;
     }>;
     createSubscription(subscription: any): Promise<{
         subscriptionId: string;

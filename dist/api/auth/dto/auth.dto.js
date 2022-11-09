@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TokenDTO = exports.RefreshTokenDTO = exports.LoginResponseDTO = exports.SignupResponseDTO = exports.EmailDTO = exports.CredentialsDTO = void 0;
+exports.TokenDTO = exports.RefreshTokenDTO = exports.LoginResponseDTO = exports.SignupResponseDTO = exports.EmailDTO = exports.SendLoginCodeDto = exports.CredentialsDTO = void 0;
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
 class CredentialsDTO {
@@ -18,13 +18,21 @@ __decorate([
     (0, class_validator_1.IsEmail)(),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
-], CredentialsDTO.prototype, "email", void 0);
+], CredentialsDTO.prototype, "phoneNumber", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
-], CredentialsDTO.prototype, "password", void 0);
+], CredentialsDTO.prototype, "code", void 0);
 exports.CredentialsDTO = CredentialsDTO;
+class SendLoginCodeDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], SendLoginCodeDto.prototype, "phoneNumber", void 0);
+exports.SendLoginCodeDto = SendLoginCodeDto;
 class EmailDTO {
 }
 __decorate([
