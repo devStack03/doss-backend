@@ -146,9 +146,9 @@ export class AuthService {
 
         const { message, code } = await this.sendSMS(loginCodeDto.phoneNumber, SMSType.VERIFY_REGISTER);
 
-        // if (message.errorCode) {
-        //     throw new BadRequestException(message.errorMessage);
-        // }
+        if (message.errorCode) {
+            throw new BadRequestException(message.errorMessage);
+        }
         user.verificationCode = code;
         await user.save();
         const { id, verificationCode, phoneNumber } = user;
@@ -165,12 +165,11 @@ export class AuthService {
     async sendSMS(phoneNumber: string, smsType: SMSType) {
         const code = randomCode(6, "123456789");
         const sms = verifyCode.auth[smsType].replace("@code", String(code));
-        const message = '';
-        // const message = await this.twilioService.client.messages.create({
-        //     body: sms,
-        //     from: process.env.TWILIO_PHONE_NUMBER,
-        //     to: `+${phoneNumber}`,
-        // });
+        const message = await this.twilioService.client.messages.create({
+            body: sms,
+            from: process.env.TWILIO_PHONE_NUMBER,
+            to: `+34${phoneNumber}`,
+        });
 
         return { message, code };
     }

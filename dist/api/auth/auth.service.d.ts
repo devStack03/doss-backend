@@ -63,7 +63,7 @@ export declare class AuthService {
         message: string;
     }>;
     sendSMS(phoneNumber: string, smsType: SMSType): Promise<{
-        message: string;
+        message: import("twilio/lib/rest/api/v2010/account/message").MessageInstance;
         code: string;
     }>;
 }

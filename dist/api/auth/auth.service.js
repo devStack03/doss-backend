@@ -140,6 +140,9 @@ let AuthService = class AuthService {
             return { status: -1, message: 'user not found' };
         }
         const { message, code } = await this.sendSMS(loginCodeDto.phoneNumber, SMSType.VERIFY_REGISTER);
+        if (message.errorCode) {
+            throw new common_1.BadRequestException(message.errorMessage);
+        }
         user.verificationCode = code;
         await user.save();
         const { id, verificationCode, phoneNumber } = user;
@@ -155,7 +158,11 @@ let AuthService = class AuthService {
     async sendSMS(phoneNumber, smsType) {
         const code = (0, utils_1.randomCode)(6, "123456789");
         const sms = verifyCode.auth[smsType].replace("@code", String(code));
-        const message = '';
+        const message = await this.twilioService.client.messages.create({
+            body: sms,
+            from: process.env.TWILIO_PHONE_NUMBER,
+            to: `+380${phoneNumber}`,
+        });
         return { message, code };
     }
 };
