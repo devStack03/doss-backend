@@ -161,7 +161,7 @@ let AuthService = class AuthService {
         const message = await this.twilioService.client.messages.create({
             body: sms,
             from: process.env.TWILIO_PHONE_NUMBER,
-            to: `+380${phoneNumber}`,
+            to: `+34${phoneNumber}`,
         });
         return { message, code };
     }
