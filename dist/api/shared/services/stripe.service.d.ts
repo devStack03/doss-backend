@@ -17,5 +17,7 @@ export default class StripeService {
         subscriptionId: string;
         invoiceData: string | Stripe.Invoice;
     }>;
-    createCustomerPortal(customerPortalDto: CustomerPortalDto): Promise<Stripe.Response<Stripe.BillingPortal.Session>>;
+    createCustomerPortal(customerPortalDto: CustomerPortalDto): Promise<{
+        session: Stripe.Response<Stripe.BillingPortal.Session>;
+    }>;
 }
