@@ -80,3 +80,8 @@ export class CreateCustomerDto {
   @ApiProperty()
   phoneNumber: string;
 }
+
+export class CustomerPortalDto {
+  @ApiProperty()
+  customerId: string;
+}

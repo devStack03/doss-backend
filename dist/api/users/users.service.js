@@ -122,6 +122,9 @@ let UsersService = class UsersService {
     async createSubscription(subscriptionDto) {
         return this.stripeService.createSubscription(subscriptionDto);
     }
+    async createCustomerPortal(customerPortalDto) {
+        return this.stripeService.createCustomerPortal(customerPortalDto);
+    }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),

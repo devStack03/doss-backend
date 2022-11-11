@@ -26,3 +26,6 @@ export declare class CreateCustomerDto {
     code: string;
     phoneNumber: string;
 }
+export declare class CustomerPortalDto {
+    customerId: string;
+}

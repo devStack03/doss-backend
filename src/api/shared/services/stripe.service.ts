@@ -3,6 +3,7 @@ import {
   BadRequestException
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { CustomerPortalDto } from 'src/api/users/dto/create-user.dto';
 import Stripe from 'stripe';
 
 @Injectable()
@@ -79,5 +80,20 @@ export default class StripeService {
       subscriptionId: subscription.id,
       invoiceData: subscription.latest_invoice,
     };
+  }
+
+  public async createCustomerPortal(customerPortalDto: CustomerPortalDto) {
+    try {
+      const session = await this.stripe.billingPortal.sessions.create({
+        customer: customerPortalDto.customerId,
+        return_url: 'https://doss.es/dashboard',
+        // return_url: 'http://localhost:3000/dashboard',
+      });
+    
+      return {session};
+    } catch (error) {
+      console.log(error);
+    }
+   
   }
 }

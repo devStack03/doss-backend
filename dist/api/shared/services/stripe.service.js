@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
+const create_user_dto_1 = require("../../users/dto/create-user.dto");
 const stripe_1 = require("stripe");
 let StripeService = class StripeService {
     constructor(configService) {
@@ -73,6 +74,18 @@ let StripeService = class StripeService {
             subscriptionId: subscription.id,
             invoiceData: subscription.latest_invoice,
         };
+    }
+    async createCustomerPortal(customerPortalDto) {
+        try {
+            const session = await this.stripe.billingPortal.sessions.create({
+                customer: customerPortalDto.customerId,
+                return_url: 'http://localhost:3000/dashboard',
+            });
+            return session;
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 };
 StripeService = __decorate([

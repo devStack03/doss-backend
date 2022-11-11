@@ -1,4 +1,5 @@
 import { ConfigService } from '@nestjs/config';
+import { CustomerPortalDto } from 'src/api/users/dto/create-user.dto';
 import Stripe from 'stripe';
 export default class StripeService {
     private configService;
@@ -16,4 +17,5 @@ export default class StripeService {
         subscriptionId: string;
         invoiceData: string | Stripe.Invoice;
     }>;
+    createCustomerPortal(customerPortalDto: CustomerPortalDto): Promise<Stripe.Response<Stripe.BillingPortal.Session>>;
 }

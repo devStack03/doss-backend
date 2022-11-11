@@ -1,7 +1,7 @@
-import { Controller, Get, Param, Post, Body, Req, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Req, Request, UseGuards, Res } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { LocalAuthGuard } from 'src/api/auth/local-auth.guard';
-import { CreateCustomerDto } from './dto/create-user.dto';
+import { CreateCustomerDto, CustomerPortalDto } from './dto/create-user.dto';
 import { validateEmail } from '../shared/utils';
 import { Logger } from 'winston';
 
@@ -39,7 +39,17 @@ export class UsersController {
   async createSubscription(@Body() subscription: any) {
     return this.userService.createSubscription(subscription);
   }
+
+  @Post('create-customer-portal-session')
+  async createCustomerPortalSession(@Body() customerPortalDto: CustomerPortalDto, @Res() res: any) {
+    console.log(customerPortalDto);
+    const session = await this.userService.createCustomerPortal(customerPortalDto);
+    // res.redirect(session.url);
+    return session;
+  }
 }
+
+
 
 // const mapToDto = (user: User) => {
 //     const sanitized = user.toObject();

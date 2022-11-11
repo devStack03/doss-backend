@@ -15,7 +15,7 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import * as bcrypt from 'bcrypt';
 import { User } from '../shared/types/user';
-import { CreateCustomerDto, UserDTO, UserSignupDTO } from './dto/create-user.dto';
+import { CreateCustomerDto, CustomerPortalDto, UserDTO, UserSignupDTO } from './dto/create-user.dto';
 import { CredentialsDTO } from '../auth/dto/auth.dto';
 import { validateEmail } from '../shared/utils/utils';
 import StripeService from '../shared/services/stripe.service';
@@ -159,5 +159,9 @@ export class UsersService {
 
   async createSubscription(subscriptionDto: any) {
     return this.stripeService.createSubscription(subscriptionDto);
+  }
+
+  async createCustomerPortal(customerPortalDto: CustomerPortalDto) {
+    return this.stripeService.createCustomerPortal(customerPortalDto);
   }
 }

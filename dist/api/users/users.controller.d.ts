@@ -126,7 +126,7 @@
 /// <reference types="stripe/types/lib" />
 /// <reference types="stripe/types/net/net" />
 import { UsersService } from './users.service';
-import { CreateCustomerDto } from './dto/create-user.dto';
+import { CreateCustomerDto, CustomerPortalDto } from './dto/create-user.dto';
 export declare class UsersController {
     private readonly userService;
     constructor(userService: UsersService);
@@ -148,4 +148,5 @@ export declare class UsersController {
         subscriptionId: string;
         invoiceData: string | import("stripe").Stripe.Invoice;
     }>;
+    createCustomerPortalSession(customerPortalDto: CustomerPortalDto, res: any): Promise<import("stripe").Stripe.Response<import("stripe").Stripe.BillingPortal.Session>>;
 }
