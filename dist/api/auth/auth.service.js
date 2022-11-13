@@ -82,13 +82,19 @@ let AuthService = class AuthService {
         const payload = { email: userLoginDto.phoneNumber, sub: user._id };
         const { accessToken, refreshToken } = await this.getTokens(payload);
         await this.usersService.setRefreshToken(refreshToken, user._id);
+        const { email, id, phoneNumber, fullName } = user;
         return {
             accessToken,
             status: 1,
             refreshToken,
             token_type: "Bearer",
             expires_in: process.env.JWT_EXPIRATION_TIME,
-            id: user._id
+            user: {
+                email,
+                id,
+                phoneNumber,
+                fullName
+            }
         };
     }
     async create(userDTO) {

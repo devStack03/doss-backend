@@ -22,14 +22,19 @@ export declare class AuthController {
         refreshToken?: undefined;
         token_type?: undefined;
         expires_in?: undefined;
-        id?: undefined;
+        user?: undefined;
     } | {
         accessToken: string;
         status: number;
         refreshToken: string;
         token_type: string;
         expires_in: string;
-        id: any;
+        user: {
+            email: string;
+            id: string;
+            phoneNumber: string;
+            fullName: string;
+        };
         message?: undefined;
     }>;
     refresh(req: any): Promise<{
