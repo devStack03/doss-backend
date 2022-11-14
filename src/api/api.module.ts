@@ -4,6 +4,8 @@ import { UsersModule } from './users/users.module';
 import { ChargeModule } from './charge/charge.module';
 import { SharedModule } from './shared/shared.module';
 import { CouponModule } from './coupon/coupon.module';
+import { EventsModule } from './events/events.module';
+import { RestaurantsModule } from './restaurants/restaurants.module';
 import SeedModule from './shared/seeds/seed.module';
 
 @Global() 
@@ -14,7 +16,9 @@ import SeedModule from './shared/seeds/seed.module';
     ChargeModule,
     SharedModule,
     CouponModule,
-    SeedModule
+    SeedModule,
+    EventsModule,
+    RestaurantsModule
   ],
   providers: [],
   exports: [],

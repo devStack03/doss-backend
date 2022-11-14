@@ -4,8 +4,9 @@ import { LocalAuthGuard } from 'src/api/auth/local-auth.guard';
 import { CreateCustomerDto, CustomerPortalDto } from './dto/create-user.dto';
 import { validateEmail } from '../shared/utils';
 import { Logger } from 'winston';
+import { ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags('User')
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) { }

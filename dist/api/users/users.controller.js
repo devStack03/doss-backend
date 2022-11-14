@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const local_auth_guard_1 = require("../auth/local-auth.guard");
 const create_user_dto_1 = require("./dto/create-user.dto");
+const swagger_1 = require("@nestjs/swagger");
 let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
@@ -86,6 +87,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "createCustomerPortalSession", null);
 UsersController = __decorate([
+    (0, swagger_1.ApiTags)('User'),
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);

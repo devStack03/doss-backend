@@ -5,6 +5,7 @@ export default class StripeService {
     private configService;
     private stripe;
     constructor(configService: ConfigService);
+    private createConfiguration;
     createCustomer(name: string, email: string): Promise<{
         prices: Stripe.Response<Stripe.ApiList<Stripe.Price>>;
         customer: Stripe.Response<Stripe.Customer>;

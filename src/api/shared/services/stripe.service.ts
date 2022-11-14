@@ -19,6 +19,18 @@ export default class StripeService {
         apiVersion: '2022-08-01',
       }
     );
+
+    // this.createConfiguration();
+  }
+
+  private async createConfiguration() {
+    const configuration = await this.stripe.billingPortal.configurations.create({
+      business_profile: {
+        headline: 'Cactus Practice partners with Stripe for simplified billing.',
+      },
+      features: {invoice_history: {enabled: true}},
+    });
+    console.log(configuration);
   }
 
   public async createCustomer(name: string, email: string) {
@@ -86,8 +98,8 @@ export default class StripeService {
     try {
       const session = await this.stripe.billingPortal.sessions.create({
         customer: customerPortalDto.customerId,
-        return_url: 'https://doss.es/dashboard',
-        // return_url: 'http://localhost:3000/dashboard',
+        // return_url: 'https://doss.es/dashboard',
+        return_url: 'http://localhost:3000/dashboard',
       });
     
       return {session};

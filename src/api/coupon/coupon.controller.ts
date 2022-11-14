@@ -1,9 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateCustomerDto } from '../users/dto/create-user.dto';
 import { CouponService } from './coupon.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 
+@ApiTags('Coupon')
 @Controller('coupon')
 export class CouponController {
   constructor(private readonly couponService: CouponService) {}

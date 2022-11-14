@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CouponController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const create_user_dto_1 = require("../users/dto/create-user.dto");
 const coupon_service_1 = require("./coupon.service");
 const create_coupon_dto_1 = require("./dto/create-coupon.dto");
@@ -85,6 +86,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CouponController.prototype, "remove", null);
 CouponController = __decorate([
+    (0, swagger_1.ApiTags)('Coupon'),
     (0, common_1.Controller)('coupon'),
     __metadata("design:paramtypes", [coupon_service_1.CouponService])
 ], CouponController);

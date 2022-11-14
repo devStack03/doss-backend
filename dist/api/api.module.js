@@ -13,6 +13,8 @@ const users_module_1 = require("./users/users.module");
 const charge_module_1 = require("./charge/charge.module");
 const shared_module_1 = require("./shared/shared.module");
 const coupon_module_1 = require("./coupon/coupon.module");
+const events_module_1 = require("./events/events.module");
+const restaurants_module_1 = require("./restaurants/restaurants.module");
 const seed_module_1 = require("./shared/seeds/seed.module");
 let ApiModule = class ApiModule {
 };
@@ -25,7 +27,9 @@ ApiModule = __decorate([
             charge_module_1.ChargeModule,
             shared_module_1.SharedModule,
             coupon_module_1.CouponModule,
-            seed_module_1.default
+            seed_module_1.default,
+            events_module_1.EventsModule,
+            restaurants_module_1.RestaurantsModule
         ],
         providers: [],
         exports: [],
