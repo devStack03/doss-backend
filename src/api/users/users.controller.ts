@@ -41,12 +41,9 @@ export class UsersController {
     return this.userService.createSubscription(subscription);
   }
 
-  @Post('create-customer-portal-session')
-  async createCustomerPortalSession(@Body() customerPortalDto: CustomerPortalDto, @Res() res: any) {
-    console.log(customerPortalDto);
-    const session = await this.userService.createCustomerPortal(customerPortalDto);
-    // res.redirect(session.url);
-    return session;
+  @Post('/create-customer-portal-session')
+  async createCustomerPortalSession(@Body() customerPortalDto: CustomerPortalDto) {
+    return this.userService.createCustomerPortal(customerPortalDto);
   }
 }
 
@@ -56,5 +53,4 @@ export class UsersController {
 //     const sanitized = user.toObject();
 //     delete sanitized['password'];
 //     return sanitized;
-
 // }

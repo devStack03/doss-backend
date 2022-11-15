@@ -34,6 +34,9 @@ export declare class AuthController {
             id: string;
             phoneNumber: string;
             fullName: string;
+            stripeCustomerId: string;
+            subscriptionPlan: string;
+            subscriptionStart: string;
         };
         message?: undefined;
     }>;

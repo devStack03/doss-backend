@@ -28,7 +28,7 @@ export default class StripeService {
       business_profile: {
         headline: 'Cactus Practice partners with Stripe for simplified billing.',
       },
-      features: {invoice_history: {enabled: true}},
+      features: { invoice_history: { enabled: true } },
     });
     console.log(configuration);
   }
@@ -98,14 +98,15 @@ export default class StripeService {
     try {
       const session = await this.stripe.billingPortal.sessions.create({
         customer: customerPortalDto.customerId,
-        // return_url: 'https://doss.es/dashboard',
-        return_url: 'http://localhost:3000/dashboard',
+        return_url: 'https://doss.es/dashboard',
+        // return_url: 'http://localhost:3000/dashboard',
       });
-    
-      return {session};
+      console.log(session);
+      return { session };
     } catch (error) {
       console.log(error);
+      throw new BadRequestException('something is wrong');
     }
-   
+
   }
 }

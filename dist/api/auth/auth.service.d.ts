@@ -37,6 +37,9 @@ export declare class AuthService {
             id: string;
             phoneNumber: string;
             fullName: string;
+            stripeCustomerId: string;
+            subscriptionPlan: string;
+            subscriptionStart: string;
         };
         message?: undefined;
     }>;

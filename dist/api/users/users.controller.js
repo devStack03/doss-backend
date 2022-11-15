@@ -39,10 +39,8 @@ let UsersController = class UsersController {
     async createSubscription(subscription) {
         return this.userService.createSubscription(subscription);
     }
-    async createCustomerPortalSession(customerPortalDto, res) {
-        console.log(customerPortalDto);
-        const session = await this.userService.createCustomerPortal(customerPortalDto);
-        return session;
+    async createCustomerPortalSession(customerPortalDto) {
+        return this.userService.createCustomerPortal(customerPortalDto);
     }
 };
 __decorate([
@@ -79,11 +77,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "createSubscription", null);
 __decorate([
-    (0, common_1.Post)('create-customer-portal-session'),
+    (0, common_1.Post)('/create-customer-portal-session'),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.CustomerPortalDto, Object]),
+    __metadata("design:paramtypes", [create_user_dto_1.CustomerPortalDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "createCustomerPortalSession", null);
 UsersController = __decorate([

@@ -70,7 +70,8 @@ export class AuthService {
         const payload = { email: userLoginDto.phoneNumber, sub: user._id };
         const { accessToken, refreshToken } = await this.getTokens(payload);
         await this.usersService.setRefreshToken(refreshToken, user._id);
-        const { email, id, phoneNumber, fullName }  = user;
+        const { email, id, phoneNumber, fullName, stripeCustomerId, subscriptionPlan, subscriptionStart }  = user;
+
         return {
             accessToken,
             status: 1,
@@ -81,7 +82,10 @@ export class AuthService {
                 email,
                 id,
                 phoneNumber,
-                fullName
+                fullName,
+                stripeCustomerId,
+                subscriptionPlan,
+                subscriptionStart
             }
         };
     }

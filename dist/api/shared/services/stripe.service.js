@@ -88,12 +88,14 @@ let StripeService = class StripeService {
         try {
             const session = await this.stripe.billingPortal.sessions.create({
                 customer: customerPortalDto.customerId,
-                return_url: 'http://localhost:3000/dashboard',
+                return_url: 'https://doss.es/dashboard',
             });
+            console.log(session);
             return { session };
         }
         catch (error) {
             console.log(error);
+            throw new common_1.BadRequestException('something is wrong');
         }
     }
 };

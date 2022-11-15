@@ -148,7 +148,7 @@ export declare class UsersController {
         subscriptionId: string;
         invoiceData: string | import("stripe").Stripe.Invoice;
     }>;
-    createCustomerPortalSession(customerPortalDto: CustomerPortalDto, res: any): Promise<{
+    createCustomerPortalSession(customerPortalDto: CustomerPortalDto): Promise<{
         session: import("stripe").Stripe.Response<import("stripe").Stripe.BillingPortal.Session>;
     }>;
 }
