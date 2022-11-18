@@ -18,6 +18,7 @@ const restaurants_service_1 = require("./restaurants.service");
 const create_restaurant_dto_1 = require("./dto/create-restaurant.dto");
 const update_restaurant_dto_1 = require("./dto/update-restaurant.dto");
 const swagger_1 = require("@nestjs/swagger");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let RestaurantsController = class RestaurantsController {
     constructor(restaurantsService) {
         this.restaurantsService = restaurantsService;
@@ -36,6 +37,10 @@ let RestaurantsController = class RestaurantsController {
     }
     remove(id) {
         return this.restaurantsService.remove(+id);
+    }
+    async activateOffer(id, req) {
+        const userId = req.user.id;
+        return this.restaurantsService.activate(id, userId);
     }
 };
 __decorate([
@@ -73,8 +78,18 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], RestaurantsController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Patch)('/:id/activate'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], RestaurantsController.prototype, "activateOffer", null);
 RestaurantsController = __decorate([
     (0, swagger_1.ApiTags)('Restaurant'),
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('restaurants'),
     __metadata("design:paramtypes", [restaurants_service_1.RestaurantsService])
 ], RestaurantsController);

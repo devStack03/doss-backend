@@ -125,6 +125,12 @@ let UsersService = class UsersService {
     async createCustomerPortal(customerPortalDto) {
         return this.stripeService.createCustomerPortal(customerPortalDto);
     }
+    async getSubscriptionDetail(userId) {
+        const user = await this.findByUserId(userId);
+        if (!user)
+            throw new common_1.BadRequestException('User not found');
+        return this.stripeService.getSubscriptionDetail(user.stripeCustomerId);
+    }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),

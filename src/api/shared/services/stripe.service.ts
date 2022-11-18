@@ -109,4 +109,16 @@ export default class StripeService {
     }
 
   }
+
+  public async getSubscriptionDetail(customerId: string) {
+    try {
+      const detail = await this.stripe.subscriptions.list({
+        customer: customerId
+      });
+      console.log(detail);
+      return detail.data[0];
+    } catch (error) {
+
+    }
+  }
 }

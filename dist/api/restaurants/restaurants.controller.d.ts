@@ -35,8 +35,21 @@ export declare class RestaurantsController {
         };
         message: string;
     }>;
-    findAll(): string;
+    findAll(): Promise<{
+        status: number;
+        data: (import("../shared/types/restaurant").Restaurant & {
+            _id: import("mongoose").Types.ObjectId;
+        })[];
+        message: string;
+    }>;
     findOne(id: string): string;
     update(id: string, updateRestaurantDto: UpdateRestaurantDto): string;
     remove(id: string): string;
+    activateOffer(id: string, req: any): Promise<{
+        status: number;
+        data: import("../shared/types/restaurant").Restaurant & {
+            _id: import("mongoose").Types.ObjectId;
+        };
+        message: string;
+    }>;
 }

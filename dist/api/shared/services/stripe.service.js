@@ -98,6 +98,17 @@ let StripeService = class StripeService {
             throw new common_1.BadRequestException('something is wrong');
         }
     }
+    async getSubscriptionDetail(customerId) {
+        try {
+            const detail = await this.stripe.subscriptions.list({
+                customer: customerId
+            });
+            console.log(detail);
+            return detail.data[0];
+        }
+        catch (error) {
+        }
+    }
 };
 StripeService = __decorate([
     (0, common_1.Injectable)(),

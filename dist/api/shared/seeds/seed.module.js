@@ -11,12 +11,18 @@ const schedule_1 = require("@nestjs/schedule");
 const mongoose_1 = require("@nestjs/mongoose");
 const coupon_code_seed_service_1 = require("./services/coupon-code-seed.service");
 const coupon_schema_1 = require("../../coupon/model/coupon.schema");
+const restaurant_schema_1 = require("../../restaurants/model/restaurant.schema");
+const event_schema_1 = require("../../events/model/event.schema");
 let SeedModule = class SeedModule {
 };
 SeedModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forFeature([{ name: "Coupon", schema: coupon_schema_1.default }]),
+            mongoose_1.MongooseModule.forFeature([
+                { name: "Coupon", schema: coupon_schema_1.default },
+                { name: "Restaurant", schema: restaurant_schema_1.default },
+                { name: "Event", schema: event_schema_1.default }
+            ]),
             schedule_1.ScheduleModule.forRoot(),
         ],
         providers: [

@@ -193,4 +193,5 @@ export declare class UsersService {
     createCustomerPortal(customerPortalDto: CustomerPortalDto): Promise<{
         session: import("stripe").Stripe.Response<import("stripe").Stripe.BillingPortal.Session>;
     }>;
+    getSubscriptionDetail(userId: string): Promise<import("stripe").Stripe.Subscription>;
 }

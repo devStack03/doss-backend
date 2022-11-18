@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 
 export interface Event extends Document {
-  id: string;
+  id?: string;
   name: string;
   description: string;
   created?: Date;
@@ -9,4 +9,5 @@ export interface Event extends Document {
   eventDate: Date;
   image: string;
   maxAttendees: number;
+  available: boolean;
 }

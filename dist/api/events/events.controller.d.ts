@@ -35,8 +35,30 @@ export declare class EventsController {
         };
         message: string;
     }>;
-    findAll(): string;
+    findAll(req: any): Promise<{
+        status: number;
+        data: any[];
+        message: string;
+    }>;
     findOne(id: string): string;
     update(id: string, updateEventDto: UpdateEventDto): string;
     remove(id: string): string;
+    changeEventState(id: string, req: any, body: any): Promise<{
+        status: number;
+        message: string;
+        data?: undefined;
+    } | {
+        status: number;
+        data: import("../shared/types/event-attend").EventAttend & {
+            _id: import("mongoose").Types.ObjectId;
+        };
+        message: string;
+    }>;
+    cancelAttendEvent(attendId: string, req: any): Promise<{
+        status: number;
+        data: import("../shared/types/event-attend").EventAttend & {
+            _id: import("mongoose").Types.ObjectId;
+        };
+        message: string;
+    }>;
 }

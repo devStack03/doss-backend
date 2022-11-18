@@ -4,9 +4,12 @@ import { LocalAuthGuard } from 'src/api/auth/local-auth.guard';
 import { CreateCustomerDto, CustomerPortalDto } from './dto/create-user.dto';
 import { validateEmail } from '../shared/utils';
 import { Logger } from 'winston';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('User')
+@ApiBearerAuth('access-token')
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) { }
@@ -16,11 +19,20 @@ export class UsersController {
     return this.userService.findAll();
   }
 
+  @Get('/subscription-detail')
+  @UseGuards(JwtAuthGuard)
+  async getUserSubscriptionDetail(@Req() req: any) {
+    const userId = req.user.id;
+    return this.userService.getSubscriptionDetail(userId);
+  }
+
   @Get(':id')
   async findOne(@Param() params) {
     console.log(params.id);
     return this.userService.findAll();
   }
+
+
 
   /**
    * another way using Param

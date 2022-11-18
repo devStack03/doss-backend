@@ -1,10 +1,14 @@
 import { Document } from "mongoose";
+import { User } from "./user";
 
 export interface Restaurant extends Document {
-  id: string;
+  id?: string;
   name: string;
   description: string;
   expireDate: Date;
   offer: string;
   image: string;
+  activator?: User;
+  status:number;
+  activatedAt?: Date;
 }

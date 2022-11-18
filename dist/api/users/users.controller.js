@@ -18,12 +18,17 @@ const users_service_1 = require("./users.service");
 const local_auth_guard_1 = require("../auth/local-auth.guard");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const swagger_1 = require("@nestjs/swagger");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
     }
     async findAll() {
         return this.userService.findAll();
+    }
+    async getUserSubscriptionDetail(req) {
+        const userId = req.user.id;
+        return this.userService.getSubscriptionDetail(userId);
     }
     async findOne(params) {
         console.log(params.id);
@@ -49,6 +54,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('/subscription-detail'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getUserSubscriptionDetail", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)()),
@@ -85,6 +98,8 @@ __decorate([
 ], UsersController.prototype, "createCustomerPortalSession", null);
 UsersController = __decorate([
     (0, swagger_1.ApiTags)('User'),
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);

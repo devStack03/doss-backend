@@ -13,16 +13,20 @@ const events_service_1 = require("./events.service");
 const events_controller_1 = require("./events.controller");
 const shared_module_1 = require("../shared/shared.module");
 const event_schema_1 = require("./model/event.schema");
+const users_module_1 = require("../users/users.module");
+const event_attend_schema_1 = require("./model/event-attend.schema");
 let EventsModule = class EventsModule {
 };
 EventsModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forFeature([{ name: "Event", schema: event_schema_1.default }]),
+            mongoose_1.MongooseModule.forFeature([{ name: "Event", schema: event_schema_1.default }, { name: 'EventAttend', schema: event_attend_schema_1.default }]),
+            (0, common_1.forwardRef)(() => users_module_1.UsersModule),
             shared_module_1.SharedModule
         ],
         controllers: [events_controller_1.EventsController],
-        providers: [events_service_1.EventsService]
+        providers: [events_service_1.EventsService],
+        exports: [events_service_1.EventsService]
     })
 ], EventsModule);
 exports.EventsModule = EventsModule;

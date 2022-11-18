@@ -21,4 +21,5 @@ export default class StripeService {
     createCustomerPortal(customerPortalDto: CustomerPortalDto): Promise<{
         session: Stripe.Response<Stripe.BillingPortal.Session>;
     }>;
+    getSubscriptionDetail(customerId: string): Promise<Stripe.Subscription>;
 }

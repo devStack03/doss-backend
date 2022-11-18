@@ -17,9 +17,13 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const coupon_seeds_1 = require("../data/coupon-seeds");
+const event_seeds_1 = require("../data/event-seeds");
+const restaurant_seeds_1 = require("../data/restaurant-seeds");
 let CouponCodeSeedService = CouponCodeSeedService_1 = class CouponCodeSeedService {
-    constructor(couponModel) {
+    constructor(couponModel, restaurantModel, eventModel) {
         this.couponModel = couponModel;
+        this.restaurantModel = restaurantModel;
+        this.eventModel = eventModel;
         this.logger = new common_1.Logger(CouponCodeSeedService_1.name);
     }
     onModuleInit() {
@@ -41,12 +45,29 @@ let CouponCodeSeedService = CouponCodeSeedService_1 = class CouponCodeSeedServic
                 .then((res) => this.logger.debug(`Collection ${this.couponModel.collection.name} successfully seeded`))
                 .catch((err) => this.logger.error(err));
         });
+        restaurant_seeds_1.restaurantSeedData.forEach((f) => {
+            this.restaurantModel
+                .findOneAndUpdate({ name: f.name }, Object.assign({}, f), { new: true, upsert: true })
+                .then((res) => this.logger.debug(`Collection ${this.restaurantModel.collection.name} successfully seeded`))
+                .catch((err) => console.log(err));
+        });
+        event_seeds_1.eventSeedData.forEach((f) => {
+            this.eventModel
+                .findOneAndUpdate({ name: f.name }, Object.assign({}, f), { new: true, upsert: true })
+                .then((res) => this.logger.debug(`Collection ${this.eventModel.collection.name} successfully seeded`))
+                .catch((err) => console.log(err));
+        });
+        console.log('seed updated');
     }
 };
 CouponCodeSeedService = CouponCodeSeedService_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)("Coupon")),
-    __metadata("design:paramtypes", [mongoose_2.Model])
+    __param(1, (0, mongoose_1.InjectModel)("Restaurant")),
+    __param(2, (0, mongoose_1.InjectModel)("Event")),
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
+        mongoose_2.Model])
 ], CouponCodeSeedService);
 exports.default = CouponCodeSeedService;
 //# sourceMappingURL=coupon-code-seed.service.js.map

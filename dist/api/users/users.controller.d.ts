@@ -131,6 +131,7 @@ export declare class UsersController {
     private readonly userService;
     constructor(userService: UsersService);
     findAll(): Promise<import("../shared/types/user").User[]>;
+    getUserSubscriptionDetail(req: any): Promise<import("stripe").Stripe.Subscription>;
     findOne(params: any): Promise<import("../shared/types/user").User[]>;
     findSecond(id: string): Promise<import("../shared/types/user").User[]>;
     createCustomer(customer: CreateCustomerDto): Promise<{

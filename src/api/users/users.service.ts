@@ -164,4 +164,10 @@ export class UsersService {
   async createCustomerPortal(customerPortalDto: CustomerPortalDto) {
     return this.stripeService.createCustomerPortal(customerPortalDto);
   }
+
+  async getSubscriptionDetail(userId: string) {
+    const user = await this.findByUserId(userId);
+    if (!user) throw new BadRequestException('User not found');
+    return this.stripeService.getSubscriptionDetail(user.stripeCustomerId);
+  }
 }

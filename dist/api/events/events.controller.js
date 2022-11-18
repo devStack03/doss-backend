@@ -18,6 +18,7 @@ const events_service_1 = require("./events.service");
 const create_event_dto_1 = require("./dto/create-event.dto");
 const update_event_dto_1 = require("./dto/update-event.dto");
 const swagger_1 = require("@nestjs/swagger");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let EventsController = class EventsController {
     constructor(eventsService) {
         this.eventsService = eventsService;
@@ -25,8 +26,9 @@ let EventsController = class EventsController {
     create(createEventDto) {
         return this.eventsService.create(createEventDto);
     }
-    findAll() {
-        return this.eventsService.findAll();
+    findAll(req) {
+        const userId = req.user.id;
+        return this.eventsService.findAll(userId);
     }
     findOne(id) {
         return this.eventsService.findOne(+id);
@@ -36,6 +38,14 @@ let EventsController = class EventsController {
     }
     remove(id) {
         return this.eventsService.remove(+id);
+    }
+    async changeEventState(id, req, body) {
+        const userId = req.user.id;
+        return this.eventsService.changeState(id, userId, +body.state);
+    }
+    async cancelAttendEvent(attendId, req) {
+        const userId = req.user.id;
+        return this.eventsService.cancelAttend(attendId, userId);
     }
 };
 __decorate([
@@ -47,8 +57,9 @@ __decorate([
 ], EventsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], EventsController.prototype, "findAll", null);
 __decorate([
@@ -73,8 +84,27 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], EventsController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Patch)('/:id/attend'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:returntype", Promise)
+], EventsController.prototype, "changeEventState", null);
+__decorate([
+    (0, common_1.Patch)('/:attendId/cancel_attend'),
+    __param(0, (0, common_1.Param)('attendId')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], EventsController.prototype, "cancelAttendEvent", null);
 EventsController = __decorate([
     (0, swagger_1.ApiTags)('Event'),
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('events'),
     __metadata("design:paramtypes", [events_service_1.EventsService])
 ], EventsController);
