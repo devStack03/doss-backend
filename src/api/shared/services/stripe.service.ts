@@ -116,9 +116,12 @@ export default class StripeService {
         customer: customerId
       });
       console.log(detail);
-      return detail.data[0];
-    } catch (error) {
+      if (detail.data.length)
+        return { status: 1, data: detail.data[0], message: 'success' };
+      return { status: 0, message: 'can\'t find your data' };
 
+    } catch (error) {
+      return { status: 0, message: 'can\'t find your data' };
     }
   }
 }

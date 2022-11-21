@@ -21,5 +21,13 @@ export default class StripeService {
     createCustomerPortal(customerPortalDto: CustomerPortalDto): Promise<{
         session: Stripe.Response<Stripe.BillingPortal.Session>;
     }>;
-    getSubscriptionDetail(customerId: string): Promise<Stripe.Subscription>;
+    getSubscriptionDetail(customerId: string): Promise<{
+        status: number;
+        data: Stripe.Subscription;
+        message: string;
+    } | {
+        status: number;
+        message: string;
+        data?: undefined;
+    }>;
 }
