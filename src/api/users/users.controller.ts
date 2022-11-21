@@ -43,6 +43,15 @@ export class UsersController {
     return this.userService.findAll();
   }
 
+  @Get('/price-list')
+  async priceList() {
+    const prices = await this.userService.getPriceList();
+    return {
+      status: 1,
+      prices
+    }
+  }
+
   @Post('/create-customer')
   async createCustomer(@Body() customer: CreateCustomerDto) {
     return this.userService.createCustomer(customer);
@@ -54,8 +63,15 @@ export class UsersController {
   }
 
   @Post('/create-customer-portal-session')
-  async createCustomerPortalSession(@Body() customerPortalDto: CustomerPortalDto) {
-    return this.userService.createCustomerPortal(customerPortalDto);
+  async createCustomerPortalSession(@Body() customerPortalDto: CustomerPortalDto, @Req() req: any) {
+    const userId = req.user.id;
+    return this.userService.createCustomerPortal(customerPortalDto, userId);
+  }
+
+  @Post('/subscription/renew')
+  async renewPlan(@Req() req: any) {
+    const userId = req.user.id;
+    return this.userService.renewSubscription(userId);
   }
 }
 

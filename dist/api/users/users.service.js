@@ -122,7 +122,10 @@ let UsersService = class UsersService {
     async createSubscription(subscriptionDto) {
         return this.stripeService.createSubscription(subscriptionDto);
     }
-    async createCustomerPortal(customerPortalDto) {
+    async createCustomerPortal(customerPortalDto, userId) {
+        const user = await this.findByUserId(userId);
+        if (!user)
+            throw new common_1.BadRequestException('User not found');
         return this.stripeService.createCustomerPortal(customerPortalDto);
     }
     async getSubscriptionDetail(userId) {
@@ -130,6 +133,15 @@ let UsersService = class UsersService {
         if (!user)
             throw new common_1.BadRequestException('User not found');
         return this.stripeService.getSubscriptionDetail(user.stripeCustomerId);
+    }
+    async renewSubscription(userId) {
+        const user = await this.findByUserId(userId);
+        if (!user)
+            throw new common_1.BadRequestException('User not found');
+        return this.stripeService.renewSubscription(user.stripeCustomerId, user.stripeSubscriptionId);
+    }
+    async getPriceList() {
+        return this.stripeService.priceList();
     }
 };
 UsersService = __decorate([

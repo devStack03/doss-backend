@@ -161,7 +161,9 @@ export class UsersService {
     return this.stripeService.createSubscription(subscriptionDto);
   }
 
-  async createCustomerPortal(customerPortalDto: CustomerPortalDto) {
+  async createCustomerPortal(customerPortalDto: CustomerPortalDto, userId: string) {
+    const user = await this.findByUserId(userId);
+    if (!user) throw new BadRequestException('User not found');
     return this.stripeService.createCustomerPortal(customerPortalDto);
   }
 
@@ -169,5 +171,15 @@ export class UsersService {
     const user = await this.findByUserId(userId);
     if (!user) throw new BadRequestException('User not found');
     return this.stripeService.getSubscriptionDetail(user.stripeCustomerId);
+  }
+
+  async renewSubscription(userId: string) {
+    const user = await this.findByUserId(userId);
+    if (!user) throw new BadRequestException('User not found');
+    return this.stripeService.renewSubscription(user.stripeCustomerId, user.stripeSubscriptionId);
+  }
+
+  async getPriceList() {
+    return this.stripeService.priceList();
   }
 }

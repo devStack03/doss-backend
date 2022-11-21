@@ -50,6 +50,16 @@ export default class StripeService {
     // this.stripe.paymentIntents.retrieve();
   }
 
+  public async priceList() {
+    const prices = await this.stripe.prices.list({
+      // lookup_keys: ['sample_basic', 'sample_premium'],
+      expand: ['data.product']
+    });
+    if (!prices) throw new BadRequestException('Getting prices was failed');
+
+    return { prices };
+  }
+
   public async charge(amount: number, paymentMethodId: string, customerId: string) {
     return this.stripe.paymentIntents.create({
       amount,
@@ -123,5 +133,13 @@ export default class StripeService {
     } catch (error) {
       return { status: 0, message: 'can\'t find your data' };
     }
+  }
+
+  async renewSubscription(customerId: string, subscriptionId: string) {
+    const subscription = await this.stripe.subscriptions.retrieve(subscriptionId);
+    const _subscription = await this.stripe.subscriptions.update(subscription.id, {
+      cancel_at_period_end: false,
+    });
+    return { status: 1, message: 'success', data: _subscription }
   }
 }

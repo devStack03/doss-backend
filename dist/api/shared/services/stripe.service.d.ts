@@ -10,6 +10,9 @@ export default class StripeService {
         prices: Stripe.Response<Stripe.ApiList<Stripe.Price>>;
         customer: Stripe.Response<Stripe.Customer>;
     }>;
+    priceList(): Promise<{
+        prices: Stripe.Response<Stripe.ApiList<Stripe.Price>>;
+    }>;
     charge(amount: number, paymentMethodId: string, customerId: string): Promise<Stripe.Response<Stripe.PaymentIntent>>;
     getSecret(cost: any): Promise<{
         client_secret: string;
@@ -29,5 +32,10 @@ export default class StripeService {
         status: number;
         message: string;
         data?: undefined;
+    }>;
+    renewSubscription(customerId: string, subscriptionId: string): Promise<{
+        status: number;
+        message: string;
+        data: Stripe.Response<Stripe.Subscription>;
     }>;
 }

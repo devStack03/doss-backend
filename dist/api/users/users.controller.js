@@ -38,14 +38,26 @@ let UsersController = class UsersController {
         console.log(id);
         return this.userService.findAll();
     }
+    async priceList() {
+        const prices = await this.userService.getPriceList();
+        return {
+            status: 1,
+            prices
+        };
+    }
     async createCustomer(customer) {
         return this.userService.createCustomer(customer);
     }
     async createSubscription(subscription) {
         return this.userService.createSubscription(subscription);
     }
-    async createCustomerPortalSession(customerPortalDto) {
-        return this.userService.createCustomerPortal(customerPortalDto);
+    async createCustomerPortalSession(customerPortalDto, req) {
+        const userId = req.user.id;
+        return this.userService.createCustomerPortal(customerPortalDto, userId);
+    }
+    async renewPlan(req) {
+        const userId = req.user.id;
+        return this.userService.renewSubscription(userId);
     }
 };
 __decorate([
@@ -76,6 +88,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findSecond", null);
 __decorate([
+    (0, common_1.Get)('/price-list'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "priceList", null);
+__decorate([
     (0, common_1.Post)('/create-customer'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -92,10 +110,18 @@ __decorate([
 __decorate([
     (0, common_1.Post)('/create-customer-portal-session'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.CustomerPortalDto]),
+    __metadata("design:paramtypes", [create_user_dto_1.CustomerPortalDto, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "createCustomerPortalSession", null);
+__decorate([
+    (0, common_1.Post)('/subscription/renew'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "renewPlan", null);
 UsersController = __decorate([
     (0, swagger_1.ApiTags)('User'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
