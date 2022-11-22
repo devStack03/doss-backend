@@ -10,6 +10,7 @@ exports.SharedModule = void 0;
 const common_1 = require("@nestjs/common");
 const axios_1 = require("@nestjs/axios");
 const stripe_service_1 = require("./services/stripe.service");
+const email_service_1 = require("./services/email.service");
 let SharedModule = class SharedModule {
 };
 SharedModule = __decorate([
@@ -18,10 +19,12 @@ SharedModule = __decorate([
             axios_1.HttpModule,
         ],
         providers: [
-            stripe_service_1.default
+            stripe_service_1.default,
+            email_service_1.default
         ],
         exports: [
-            stripe_service_1.default
+            stripe_service_1.default,
+            email_service_1.default
         ],
         controllers: []
     })

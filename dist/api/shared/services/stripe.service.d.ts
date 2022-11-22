@@ -1,10 +1,12 @@
 import { ConfigService } from '@nestjs/config';
 import { CustomerPortalDto } from 'src/api/users/dto/create-user.dto';
 import Stripe from 'stripe';
+import EmailService from './email.service';
 export default class StripeService {
     private configService;
+    private emailService;
     private stripe;
-    constructor(configService: ConfigService);
+    constructor(configService: ConfigService, emailService: EmailService);
     private createConfiguration;
     createCustomer(name: string, email: string): Promise<{
         prices: Stripe.Response<Stripe.ApiList<Stripe.Price>>;
@@ -20,6 +22,13 @@ export default class StripeService {
     createSubscription(subscriptionDto: any): Promise<{
         subscriptionId: string;
         invoiceData: string | Stripe.Invoice;
+        status?: undefined;
+        message?: undefined;
+    } | {
+        status: number;
+        message: string;
+        subscriptionId?: undefined;
+        invoiceData?: undefined;
     }>;
     createCustomerPortal(customerPortalDto: CustomerPortalDto): Promise<{
         session: Stripe.Response<Stripe.BillingPortal.Session>;

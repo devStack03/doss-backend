@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Req, Request, UseGuards, Res } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Req, Request, UseGuards, Res, Patch } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { LocalAuthGuard } from 'src/api/auth/local-auth.guard';
 import { CreateCustomerDto, CustomerPortalDto } from './dto/create-user.dto';
@@ -9,12 +9,12 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('User')
 @ApiBearerAuth('access-token')
-@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) { }
 
   @Get('')
+  @UseGuards(JwtAuthGuard)
   async findAll() {
     return this.userService.findAll();
   }
@@ -26,13 +26,20 @@ export class UsersController {
     return this.userService.getSubscriptionDetail(userId);
   }
 
-  @Get(':id')
-  async findOne(@Param() params) {
-    console.log(params.id);
-    return this.userService.findAll();
+  @Get('/price-list')
+  async priceList() {
+    const {prices} = await this.userService.getPriceList();
+    return {
+      status: 1,
+      prices
+    }
   }
 
-
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  async findOne(@Param('id') id: string) {
+    return this.userService.findByUserId(id);
+  }
 
   /**
    * another way using Param
@@ -43,14 +50,17 @@ export class UsersController {
     return this.userService.findAll();
   }
 
-  @Get('/price-list')
-  async priceList() {
-    const prices = await this.userService.getPriceList();
+  @Patch('/update')
+  @UseGuards(JwtAuthGuard)
+  async update(@Body() body: any, @Req() req: any) {
+    const userId = req.user.id;
+    const _user = await this.userService.update(userId, body);
     return {
       status: 1,
-      prices
+      data: _user
     }
   }
+
 
   @Post('/create-customer')
   async createCustomer(@Body() customer: CreateCustomerDto) {
@@ -63,12 +73,14 @@ export class UsersController {
   }
 
   @Post('/create-customer-portal-session')
+  @UseGuards(JwtAuthGuard)
   async createCustomerPortalSession(@Body() customerPortalDto: CustomerPortalDto, @Req() req: any) {
     const userId = req.user.id;
     return this.userService.createCustomerPortal(customerPortalDto, userId);
   }
 
   @Post('/subscription/renew')
+  @UseGuards(JwtAuthGuard)
   async renewPlan(@Req() req: any) {
     const userId = req.user.id;
     return this.userService.renewSubscription(userId);

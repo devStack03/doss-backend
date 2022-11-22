@@ -13,9 +13,11 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const create_user_dto_1 = require("../../users/dto/create-user.dto");
 const stripe_1 = require("stripe");
+const email_service_1 = require("./email.service");
 let StripeService = class StripeService {
-    constructor(configService) {
+    constructor(configService, emailService) {
         this.configService = configService;
+        this.emailService = emailService;
         this.stripe = new stripe_1.default(configService.get('STRIPE_SECRET_KEY'), {
             apiVersion: '2022-08-01',
         });
@@ -74,23 +76,34 @@ let StripeService = class StripeService {
         return { client_secret: paymentIntent.client_secret };
     }
     async createSubscription(subscriptionDto) {
-        const subscription = await this.stripe.subscriptions.create({
-            customer: subscriptionDto.customerId,
-            items: [{
-                    price: subscriptionDto.priceId,
-                }],
-            payment_settings: {
-                payment_method_types: ['card']
-            },
-            payment_behavior: 'default_incomplete',
-            expand: ['latest_invoice.payment_intent'],
-        });
-        if (!subscription)
-            throw new common_1.BadRequestException('subscription failed');
-        return {
-            subscriptionId: subscription.id,
-            invoiceData: subscription.latest_invoice,
-        };
+        try {
+            const subscription = await this.stripe.subscriptions.create({
+                customer: subscriptionDto.customerId,
+                items: [{
+                        price: subscriptionDto.priceId,
+                    }],
+                payment_settings: {
+                    payment_method_types: ['card']
+                },
+                payment_behavior: 'default_incomplete',
+                expand: ['latest_invoice.payment_intent'],
+            });
+            if (!subscription) {
+                throw new common_1.BadRequestException('subscription failed');
+            }
+            return {
+                subscriptionId: subscription.id,
+                invoiceData: subscription.latest_invoice,
+            };
+        }
+        catch (error) {
+            console.log(error);
+            await this.emailService.sendPaymentFailureMail(subscriptionDto);
+            return {
+                status: -11,
+                message: 'payment failure'
+            };
+        }
     }
     async createCustomerPortal(customerPortalDto) {
         try {
@@ -130,7 +143,8 @@ let StripeService = class StripeService {
 };
 StripeService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __metadata("design:paramtypes", [config_1.ConfigService,
+        email_service_1.default])
 ], StripeService);
 exports.default = StripeService;
 //# sourceMappingURL=stripe.service.js.map

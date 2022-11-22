@@ -30,19 +30,26 @@ let UsersController = class UsersController {
         const userId = req.user.id;
         return this.userService.getSubscriptionDetail(userId);
     }
-    async findOne(params) {
-        console.log(params.id);
-        return this.userService.findAll();
+    async priceList() {
+        const { prices } = await this.userService.getPriceList();
+        return {
+            status: 1,
+            prices
+        };
+    }
+    async findOne(id) {
+        return this.userService.findByUserId(id);
     }
     async findSecond(id) {
         console.log(id);
         return this.userService.findAll();
     }
-    async priceList() {
-        const prices = await this.userService.getPriceList();
+    async update(body, req) {
+        const userId = req.user.id;
+        const _user = await this.userService.update(userId, body);
         return {
             status: 1,
-            prices
+            data: _user
         };
     }
     async createCustomer(customer) {
@@ -62,6 +69,7 @@ let UsersController = class UsersController {
 };
 __decorate([
     (0, common_1.Get)(''),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
@@ -75,10 +83,17 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserSubscriptionDetail", null);
 __decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)()),
+    (0, common_1.Get)('/price-list'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "priceList", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findOne", null);
 __decorate([
@@ -88,11 +103,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findSecond", null);
 __decorate([
-    (0, common_1.Get)('/price-list'),
+    (0, common_1.Patch)('/update'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "priceList", null);
+], UsersController.prototype, "update", null);
 __decorate([
     (0, common_1.Post)('/create-customer'),
     __param(0, (0, common_1.Body)()),
@@ -109,6 +127,7 @@ __decorate([
 ], UsersController.prototype, "createSubscription", null);
 __decorate([
     (0, common_1.Post)('/create-customer-portal-session'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -117,6 +136,7 @@ __decorate([
 ], UsersController.prototype, "createCustomerPortalSession", null);
 __decorate([
     (0, common_1.Post)('/subscription/renew'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -125,7 +145,6 @@ __decorate([
 UsersController = __decorate([
     (0, swagger_1.ApiTags)('User'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);

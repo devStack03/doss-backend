@@ -189,6 +189,13 @@ export declare class UsersService {
     createSubscription(subscriptionDto: any): Promise<{
         subscriptionId: string;
         invoiceData: string | import("stripe").Stripe.Invoice;
+        status?: undefined;
+        message?: undefined;
+    } | {
+        status: number;
+        message: string;
+        subscriptionId?: undefined;
+        invoiceData?: undefined;
     }>;
     createCustomerPortal(customerPortalDto: CustomerPortalDto, userId: string): Promise<{
         session: import("stripe").Stripe.Response<import("stripe").Stripe.BillingPortal.Session>;

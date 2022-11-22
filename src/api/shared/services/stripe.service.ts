@@ -5,13 +5,15 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { CustomerPortalDto } from 'src/api/users/dto/create-user.dto';
 import Stripe from 'stripe';
+import EmailService from './email.service';
 
 @Injectable()
 export default class StripeService {
   private stripe: Stripe;
 
   constructor(
-    private configService: ConfigService
+    private configService: ConfigService,
+    private emailService: EmailService
   ) {
     this.stripe = new Stripe(
       configService.get('STRIPE_SECRET_KEY'),
@@ -85,23 +87,36 @@ export default class StripeService {
   }
 
   public async createSubscription(subscriptionDto: any) {
-    const subscription = await this.stripe.subscriptions.create({
-      customer: subscriptionDto.customerId,
-      items: [{
-        price: subscriptionDto.priceId,
-      }],
-      payment_settings: {
-        payment_method_types: ['card']
-      },
-      payment_behavior: 'default_incomplete',
-      expand: ['latest_invoice.payment_intent'],
-    });
+    try {
+      const subscription = await this.stripe.subscriptions.create({
+        customer: subscriptionDto.customerId,
+        items: [{
+          price: subscriptionDto.priceId,
+        }],
+        payment_settings: {
+          payment_method_types: ['card']
+        },
+        payment_behavior: 'default_incomplete',
+        expand: ['latest_invoice.payment_intent'],
+      });
+      // await this.emailService.sendPaymentFailureMail(subscriptionDto);
+      if (!subscription) {
+        throw new BadRequestException('subscription failed');
+      }
 
-    if (!subscription) throw new BadRequestException('subscription failed');
-    return {
-      subscriptionId: subscription.id,
-      invoiceData: subscription.latest_invoice,
-    };
+      return {
+        subscriptionId: subscription.id,
+        invoiceData: subscription.latest_invoice,
+      };
+  
+    } catch (error) {
+      console.log(error);
+      await this.emailService.sendPaymentFailureMail(subscriptionDto);
+      return {
+        status: -11,
+        message: 'payment failure'
+      }
+    }
   }
 
   public async createCustomerPortal(customerPortalDto: CustomerPortalDto) {
