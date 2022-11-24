@@ -14,12 +14,16 @@ const restaurants_controller_1 = require("./restaurants.controller");
 const restaurant_schema_1 = require("./model/restaurant.schema");
 const shared_module_1 = require("../shared/shared.module");
 const users_module_1 = require("../users/users.module");
+const user_offer_schema_1 = require("./model/user-offer.schema");
 let RestaurantsModule = class RestaurantsModule {
 };
 RestaurantsModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forFeature([{ name: "Restaurant", schema: restaurant_schema_1.default }]),
+            mongoose_1.MongooseModule.forFeature([
+                { name: "Restaurant", schema: restaurant_schema_1.default },
+                { name: "UserOffer", schema: user_offer_schema_1.default },
+            ]),
             (0, common_1.forwardRef)(() => users_module_1.UsersModule),
             shared_module_1.SharedModule
         ],

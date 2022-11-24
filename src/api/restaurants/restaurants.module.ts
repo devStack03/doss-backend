@@ -6,11 +6,15 @@ import { RestaurantsController } from './restaurants.controller';
 import RestaurantSchema from './model/restaurant.schema';
 import { SharedModule } from '../shared/shared.module';
 import { UsersModule } from '../users/users.module';
+import UserOfferSchema from './model/user-offer.schema';
 
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: "Restaurant", schema: RestaurantSchema }]),
+    MongooseModule.forFeature([
+      { name: "Restaurant", schema: RestaurantSchema },
+      { name: "UserOffer", schema: UserOfferSchema },
+    ]),
     forwardRef(() => UsersModule),
     SharedModule
   ],

@@ -135,16 +135,14 @@ export default class StripeService {
 
   }
 
-  public async getSubscriptionDetail(customerId: string) {
+  public async getSubscriptionDetail(customerId: string, subscriptionId: string) {
     try {
-      const detail = await this.stripe.subscriptions.list({
-        customer: customerId
-      });
+      const detail = await this.stripe.subscriptions.retrieve(subscriptionId);
+      // const detail = await this.stripe.subscriptions.list({
+      //   customer: customerId
+      // });
       console.log(detail);
-      if (detail.data.length)
-        return { status: 1, data: detail.data[0], message: 'success' };
-      return { status: 0, message: 'can\'t find your data' };
-
+      return { status: 1, data: detail, message: 'success' };
     } catch (error) {
       return { status: 0, message: 'can\'t find your data' };
     }

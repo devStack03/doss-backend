@@ -17,21 +17,27 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const users_service_1 = require("../users/users.service");
-const restaurant_schema_1 = require("./model/restaurant.schema");
 let RestaurantsService = class RestaurantsService {
-    constructor(restaurantModel, usersService) {
+    constructor(restaurantModel, offerModel, usersService) {
         this.restaurantModel = restaurantModel;
+        this.offerModel = offerModel;
         this.usersService = usersService;
     }
     async create(createRestaurantDto) {
         const res = await this.restaurantModel.create(createRestaurantDto);
         return { status: 1, data: res, message: 'success' };
     }
-    async findAll() {
-        const allRestaurants = await this.restaurantModel.find().sort({ status: 1 });
+    async findAll(userId = null) {
+        const allRestaurants = await this.restaurantModel.find().sort({ status: 1 }).lean().exec();
+        let temp = [];
+        for (let r of allRestaurants) {
+            const offers = await this.offerModel.find({ restaurant: r._id, user: userId });
+            const t = Object.assign(Object.assign({}, r), { id: r._id, offerId: offers.length ? offers[0]._id : null, status: offers.length ? 1 : 0 });
+            temp.push(t);
+        }
         return {
             status: 1,
-            data: allRestaurants,
+            data: temp,
             message: 'success'
         };
     }
@@ -53,13 +59,14 @@ let RestaurantsService = class RestaurantsService {
     async activate(restaurantId, userId) {
         const restaurant = await this.findByRestaurantId(restaurantId);
         const user = await this.usersService.findByUserId(userId);
-        restaurant.activator = user;
-        restaurant.status = restaurant_schema_1.OfferType.ACTIVATED;
-        restaurant.activatedAt = new Date();
-        await restaurant.save();
+        const newOffer = new this.offerModel({
+            user,
+            restaurant
+        });
+        await newOffer.save();
         return {
             status: 1,
-            data: restaurant,
+            data: Object.assign(Object.assign({}, restaurant.toJSON()), { offerId: newOffer._id, status: 1 }),
             message: 'activated offer'
         };
     }
@@ -67,8 +74,10 @@ let RestaurantsService = class RestaurantsService {
 RestaurantsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)('Restaurant')),
-    __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => users_service_1.UsersService))),
+    __param(1, (0, mongoose_1.InjectModel)('UserOffer')),
+    __param(2, (0, common_1.Inject)((0, common_1.forwardRef)(() => users_service_1.UsersService))),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
         users_service_1.UsersService])
 ], RestaurantsService);
 exports.RestaurantsService = RestaurantsService;

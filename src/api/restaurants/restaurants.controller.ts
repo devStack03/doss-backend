@@ -30,8 +30,8 @@ export class RestaurantsController {
   }
 
   @Get()
-  findAll() {
-    return this.restaurantsService.findAll();
+  findAll(@Req() req: any) {
+    return this.restaurantsService.findAll(req.user.id);
   }
 
   @Get(':id')
@@ -49,7 +49,13 @@ export class RestaurantsController {
     return this.restaurantsService.remove(+id);
   }
 
-  @Patch('/:id/activate')
+  // @Patch('/:id/activate')
+  // async activateOffer(@Param('id') id: string, @Req() req: any) {
+  //   const userId = req.user.id;
+  //   return this.restaurantsService.activate(id, userId);
+  // }
+
+  @Post('/:id/activate')
   async activateOffer(@Param('id') id: string, @Req() req: any) {
     const userId = req.user.id;
     return this.restaurantsService.activate(id, userId);

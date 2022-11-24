@@ -170,7 +170,7 @@ export class UsersService {
   async getSubscriptionDetail(userId: string) {
     const user = await this.findByUserId(userId);
     if (!user) throw new BadRequestException('User not found');
-    return this.stripeService.getSubscriptionDetail(user.stripeCustomerId);
+    return this.stripeService.getSubscriptionDetail(user.stripeCustomerId, user.stripeSubscriptionId);
   }
 
   async renewSubscription(userId: string) {

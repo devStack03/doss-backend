@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const timestamp = require("mongoose-timestamp");
 const opts = { toJSON: { virtuals: true } };
 const UserOfferSchema = new mongoose.Schema({
-    owner: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
@@ -13,6 +13,10 @@ const UserOfferSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'restaurant',
         required: true
+    },
+    status: {
+        type: Number,
+        default: 1
     }
 }, opts);
 UserOfferSchema.virtual('id').get(function () {

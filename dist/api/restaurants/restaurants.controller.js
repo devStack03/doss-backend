@@ -26,8 +26,8 @@ let RestaurantsController = class RestaurantsController {
     create(createRestaurantDto) {
         return this.restaurantsService.create(createRestaurantDto);
     }
-    findAll() {
-        return this.restaurantsService.findAll();
+    findAll(req) {
+        return this.restaurantsService.findAll(req.user.id);
     }
     findOne(id) {
         return this.restaurantsService.findOne(+id);
@@ -52,8 +52,9 @@ __decorate([
 ], RestaurantsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], RestaurantsController.prototype, "findAll", null);
 __decorate([
@@ -79,7 +80,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], RestaurantsController.prototype, "remove", null);
 __decorate([
-    (0, common_1.Patch)('/:id/activate'),
+    (0, common_1.Post)('/:id/activate'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),

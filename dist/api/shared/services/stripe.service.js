@@ -119,15 +119,11 @@ let StripeService = class StripeService {
             throw new common_1.BadRequestException('something is wrong');
         }
     }
-    async getSubscriptionDetail(customerId) {
+    async getSubscriptionDetail(customerId, subscriptionId) {
         try {
-            const detail = await this.stripe.subscriptions.list({
-                customer: customerId
-            });
+            const detail = await this.stripe.subscriptions.retrieve(subscriptionId);
             console.log(detail);
-            if (detail.data.length)
-                return { status: 1, data: detail.data[0], message: 'success' };
-            return { status: 0, message: 'can\'t find your data' };
+            return { status: 1, data: detail, message: 'success' };
         }
         catch (error) {
             return { status: 0, message: 'can\'t find your data' };

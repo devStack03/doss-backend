@@ -202,7 +202,7 @@ export declare class UsersService {
     }>;
     getSubscriptionDetail(userId: string): Promise<{
         status: number;
-        data: import("stripe").Stripe.Subscription;
+        data: import("stripe").Stripe.Response<import("stripe").Stripe.Subscription>;
         message: string;
     } | {
         status: number;

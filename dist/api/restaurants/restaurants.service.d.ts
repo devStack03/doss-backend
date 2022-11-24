@@ -22,14 +22,16 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/inferschematype" />
 import { Model } from 'mongoose';
+import { UserOffer } from '../shared/types/offer';
 import { Restaurant } from '../shared/types/restaurant';
 import { UsersService } from '../users/users.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 export declare class RestaurantsService {
     private restaurantModel;
+    private offerModel;
     private usersService;
-    constructor(restaurantModel: Model<Restaurant>, usersService: UsersService);
+    constructor(restaurantModel: Model<Restaurant>, offerModel: Model<UserOffer>, usersService: UsersService);
     create(createRestaurantDto: CreateRestaurantDto): Promise<{
         status: number;
         data: Restaurant & {
@@ -37,11 +39,9 @@ export declare class RestaurantsService {
         };
         message: string;
     }>;
-    findAll(): Promise<{
+    findAll(userId?: any): Promise<{
         status: number;
-        data: (Restaurant & {
-            _id: import("mongoose").Types.ObjectId;
-        })[];
+        data: any[];
         message: string;
     }>;
     findOne(id: number): string;
@@ -52,8 +52,9 @@ export declare class RestaurantsService {
     remove(id: number): string;
     activate(restaurantId: string, userId: string): Promise<{
         status: number;
-        data: Restaurant & {
-            _id: import("mongoose").Types.ObjectId;
+        data: {
+            offerId: any;
+            status: number;
         };
         message: string;
     }>;

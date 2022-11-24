@@ -1,6 +1,7 @@
 import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { UserOffer } from '../shared/types/offer';
 import { Restaurant } from '../shared/types/restaurant';
 import { UsersService } from '../users/users.service';
 import { ActivateOfferDto } from './dto';
@@ -13,6 +14,7 @@ export class RestaurantsService {
 
   constructor(
     @InjectModel('Restaurant') private restaurantModel: Model<Restaurant>,
+    @InjectModel('UserOffer') private offerModel: Model<UserOffer>,
     @Inject(forwardRef(() => UsersService)) private usersService: UsersService
   ) { }
   async create(createRestaurantDto: CreateRestaurantDto) {
@@ -20,11 +22,22 @@ export class RestaurantsService {
     return { status: 1, data: res, message: 'success' }
   }
 
-  async findAll() {
-    const allRestaurants = await this.restaurantModel.find().sort({status : 1});
+  async findAll(userId = null) {
+    const allRestaurants = await this.restaurantModel.find().sort({status : 1}).lean().exec();
+    let temp = [];
+    for (let r of allRestaurants) {
+      const offers = await this.offerModel.find({restaurant: r._id, user: userId});
+      const t = {
+        ...r,
+        id: r._id,
+        offerId: offers.length ? offers[0]._id: null,
+        status: offers.length ? 1 : 0,
+      };
+      temp.push(t);
+    }
     return {
       status: 1,
-      data: allRestaurants,
+      data: temp,
       message: 'success'
     }
   }
@@ -50,14 +63,23 @@ export class RestaurantsService {
   async activate(restaurantId: string, userId: string) {
     const restaurant = await this.findByRestaurantId(restaurantId);
     const user = await this.usersService.findByUserId(userId);
-    restaurant.activator = user;
-    restaurant.status = OfferType.ACTIVATED;
-    restaurant.activatedAt = new Date();
-    await restaurant.save();
+    // restaurant.activator = user;
+    // restaurant.status = OfferType.ACTIVATED;
+    // restaurant.activatedAt = new Date();
+    
+    const newOffer = new this.offerModel({
+      user,
+      restaurant
+    });
+    await newOffer.save();
 
     return {
       status: 1,
-      data: restaurant,
+      data: {
+        ...restaurant.toJSON(),
+        offerId: newOffer._id,
+        status: 1
+      },
       message: 'activated offer'
     }
   }

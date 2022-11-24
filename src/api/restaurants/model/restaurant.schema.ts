@@ -36,7 +36,7 @@ const RestaurantSchema = new mongoose.Schema(
       ref: "User",
       default: null
     },
-    status: {
+    available: {
       type: Number,
       default: OfferType.ENABLED //  activated: 0, enabled: 1,  expired: -1
     },

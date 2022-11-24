@@ -9,6 +9,6 @@ export interface Restaurant extends Document {
   offer: string;
   image: string;
   activator?: User;
-  status:number;
+  available:number;
   activatedAt?: Date;
 }

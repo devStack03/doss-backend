@@ -7,7 +7,7 @@ export const restaurantSeedData = [
     expireDate: new Date(2022, 11, 27),
     offer: '',
     image: 'https://uploads-ssl.webflow.com/60bac9ce05d99462bf6ab551/61ae639fc59b7053eb23b15e_260857074_438697341103124_1139960983959099419_n.jpg',
-    status: 1
+    available: 1
   } as Restaurant,
   {
     name: 'The restaurant at the durham',
@@ -15,7 +15,7 @@ export const restaurantSeedData = [
     expireDate: new Date(2022, 11, 27),
     offer: '',
     image: 'https://uploads-ssl.webflow.com/60bac9ce05d99462bf6ab551/61ae579558e145e9ea14a794_the%20durham-p-500.png',
-    status: 1
+    available: 1
   } as Restaurant,
   {
     name: 'Simons says dip this',
@@ -23,7 +23,7 @@ export const restaurantSeedData = [
     expireDate: new Date(2022, 11, 27),
     offer: '',
     image: 'https://uploads-ssl.webflow.com/60bac9ce05d99462bf6ab551/61ae61ab18623d25703ce804_simon%20says-p-500.png',
-    status: 1
+    available: 1
   } as Restaurant,
   {
     name: 'LOCALS OYSTER BAR',
@@ -31,6 +31,6 @@ export const restaurantSeedData = [
     expireDate: new Date(2022, 11, 27),
     offer: '',
     image: 'https://uploads-ssl.webflow.com/60bac9ce05d99462bf6ab551/61ae639fc59b7053eb23b15e_260857074_438697341103124_1139960983959099419_n.jpg',
-    status: 1
+    available: 1
   } as Restaurant,
 ]

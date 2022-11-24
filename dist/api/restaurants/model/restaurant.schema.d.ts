@@ -6,9 +6,9 @@ export declare enum OfferType {
 }
 declare const RestaurantSchema: mongoose.Schema<any, mongoose.Model<any, any, any, any, any>, {}, {}, any, {}, "type", {
     name: string;
-    status: number;
     description: string;
     image: string;
+    available: number;
     expireDate: Date;
     offer: string;
     activatedAt: Date;
